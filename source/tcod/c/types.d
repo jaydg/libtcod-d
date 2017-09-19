@@ -42,7 +42,7 @@ enum {
 }
 
 // color array
-  const TCOD_color_t  TCOD_colors[TCOD_COLOR_NB][TCOD_COLOR_LEVELS];
+  const TCOD_color_t[TCOD_COLOR_LEVELS][TCOD_COLOR_NB] TCOD_colors;
 
 // grey levels
   const TCOD_color_t TCOD_black = TCOD_color_t(0, 0, 0);
@@ -477,8 +477,8 @@ struct TCOD_lex_t {
 	char *last_javadoc_comment;
 	// private stuff
 	int nb_symbols, nb_keywords, flags;
-        char symbols[ TCOD_LEX_MAX_SYMBOLS][ TCOD_LEX_SYMBOL_SIZE ];
-	char keywords[ TCOD_LEX_MAX_KEYWORDS ][ TCOD_LEX_KEYWORD_SIZE ];
+	char[TCOD_LEX_SYMBOL_SIZE][TCOD_LEX_MAX_SYMBOLS] symbols;
+	char[TCOD_LEX_KEYWORD_SIZE][TCOD_LEX_MAX_KEYWORDS] keywords;
 	const char *simpleCmt;
 	const char* cmtStart, cmtStop, javadocCmtStart;
 	const char *stringDelim;
@@ -593,7 +593,7 @@ struct TCOD_parser_int_t {
 	/* list of structures */
 	TCOD_list_t structs;
 	/* list of custom type parsers */
-	TCOD_parser_custom_t customs[16];
+	TCOD_parser_custom_t[16] customs;
 	/* fatal error occured */
 	bool fatal;
 	// list of properties if default listener is used
