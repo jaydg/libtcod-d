@@ -17,21 +17,17 @@ void main()
     stdout.writeln("/// This module has been automatically generated.");
     stdout.writeln("module tcod.c.functions;\n");
 
-    stdout.writeln("version (Tango) {\n    import tango.sys.SharedLib;");
-    stdout.writeln("    import tango.stdc.stringz;");
-    stdout.writeln("} else import std.loader;\n");
+    stdout.writeln("version(Posix) {");
+    stdout.writeln("    import core.sys.posix.dlfcn;");
+    stdout.writeln("} else {");
+    stdout.writeln("    import core.runtime;");
+    stdout.writeln("    import std.c.windows.windows;");
+    stdout.writeln("}\n");
+
+    stdout.writeln("import std.string: toStringz;\n");
 
     stdout.writeln("import tcod.c.all;");
     stdout.writeln("import tcod.c.types;\n");
-
-    stdout.writeln("version (D_Version2) {");
-    stdout.writeln(`    string gshared() { return "__gshared "; }`);
-    stdout.writeln("} else {");
-    stdout.writeln(`    string gshared() { return " "; }`);
-    stdout.writeln("}\n");
-
-    stdout.writeln("version (Tango) alias SharedLib SharedObject;");
-    stdout.writeln("else alias HXModule SharedObject;\n");
 
     stdout.writeln("extern (C):\n");
 
@@ -43,46 +39,42 @@ void main()
 
     // Okay, first declare the function variables.
     foreach (functionLine; functions) {
-        stdout.writeln(`mixin(gshared() ~ "`, functionLine, `");`);
+        stdout.writeln("__gshared ", functionLine);
     }
     stdout.writeln();
 
     stdout.writeln("extern (D):\n");
 
-    stdout.writeln(`mixin("private " ~ gshared() ~ "SharedObject gTCODhandle;");`);
+    stdout.writeln("private __gshared void* gTCODhandle;");
     stdout.writeln();
-    stdout.writeln("private void* getSymbol(string name)");
+
+    stdout.writeln("private T getSymbol(T = void*)(string symbolName)");
     stdout.writeln("{");
-    stdout.writeln("    version (Tango) return gTCODhandle.getSymbol(toStringz(name));");
-    stdout.writeln("    else return ExeModule_GetSymbol(gTCODhandle, name);");
+    stdout.writeln("    version(Posix) {");
+    stdout.writeln("        return cast(T)dlsym(gTCODhandle, symbolName.toStringz);");
+    stdout.writeln("    } else {");
+    stdout.writeln("        return cast(T)GetProcAddress(cast(HMODULE)gTCODhandle, symbolName.toStringz);");
+    stdout.writeln("    }");
     stdout.writeln("}");
 
     stdout.writeln("static ~this()\n{");
-    stdout.writeln("    version (Tango) gTCODhandle.unload();");
-    stdout.writeln("    else ExeModule_Uninit();");
+    stdout.writeln("    version(Posix) {");
+    stdout.writeln("        dlclose(gTCODhandle);");
+    stdout.writeln("    } else {");
+    stdout.writeln("        Runtime.unloadLibrary(gTCODhandle);");
+    stdout.writeln("    }");
     stdout.writeln("}\n");
 
     stdout.writeln("static this()\n{");
-    stdout.writeln("    version (Tango) {");
-    stdout.writeln("    } else {");
-    stdout.writeln("        if (ExeModule_Init() < 0) {");
-    stdout.writeln(`            throw new Exception("std.loader.ExeModule_Init has failed to initialise.");`);
-    stdout.writeln("        }");
-    stdout.writeln("    }\n");
-
     stdout.writeln("    version (Posix) {");
-    stdout.writeln(`        version (Tango) gTCODhandle = SharedLib.load("./libtcod_debug.so");`);
-    stdout.writeln(`        else gTCODhandle = ExeModule_Load("./libtcod_debug.so");`);
+    stdout.writeln(`        gTCODhandle = dlopen("./libtcod_debug.so".toStringz, RTLD_NOW);`);
     stdout.writeln(`        if (!gTCODhandle) {`);
-    stdout.writeln(`            version (Tango) gTCODhandle = SharedLib.load("./libtcod.so");`);
-    stdout.writeln(`            else gTCODhandle = ExeModule_Load("./libtcod.so");`);
+    stdout.writeln(`            gTCODhandle = dlopen("./libtcod.so".toStringz, RTLD_NOW);`);
     stdout.writeln(`        }`);
     stdout.writeln("    } else {");
-    stdout.writeln(`        version (Tango) gTCODhandle = SharedLib.load("libtcod_debug.dll");`);
-    stdout.writeln(`        else gTCODhandle = ExeModule_Load("libtcod_debug.dll");`);
+    stdout.writeln(`        gTCODhandle = Runtime.loadLibrary("libtcod_debug.dll");`);
     stdout.writeln(`        if (!gTCODhandle) {`);
-    stdout.writeln(`            version (Tango) gTCODhandle = SharedLib.load("libtcod.dll");`);
-    stdout.writeln(`            else gTCODhandle = ExeModule_Load("libtcod.dll");`);
+    stdout.writeln(`            gTCODhandle = Runtime.loadLibrary("libtcod.dll");`);
     stdout.writeln(`        }`);
     stdout.writeln("    }");
     stdout.writeln("    assert(gTCODhandle);\n");
@@ -130,4 +122,3 @@ unittest
     assert(emptyOrWhitespace("   \t\n   \t \n"));
     assert(!emptyOrWhitespace("  a "));
 }
-
