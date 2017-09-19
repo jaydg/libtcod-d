@@ -1,0 +1,14 @@
+{
+    "name":         "samples_d",
+    "description":  "Simpe example application for the libtcod-d library",
+    "homepage":     "https://github.com/bhelyer/libtcod-d",
+    "authors":      [ "Bernard Helyer" ],
+    "license":      "BSD",
+    "dependencies": {
+                    "libtcod-d": { "path": "../../" }
+    },
+    "targetPath":   "../../bin",
+    "targetType":   "executable",
+    "targetName":   "samples_d"
+}
+

@@ -1,0 +1,9 @@
+{
+	"name": "libtcod-d",
+	"description": "Bindings for using the excellent libtcod",
+	"homepage": "https://github.com/bhelyer/libtcod-d",
+	"copyright": "Copyright © 2012, Bernard Helyer",
+	"authors": ["Bernard Helyer", "Joachim de Groot"],
+	"license": "BSD",
+	"targetType": "sourceLibrary"
+}

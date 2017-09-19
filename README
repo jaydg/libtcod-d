@@ -2,7 +2,7 @@
            libtcod-d 1.5.0-1
 ----------------------------------------
 
-libtcod-d is a set of bindings for using the excellent 
+libtcod-d is a set of bindings for using the excellent
 libtcod ( http://doryen.eptalys.net/libtcod/ ) in the D programming language.
 
 The DLL (libtcod.so on Linux, libtcod.dll on Windows) is dynamically loaded
@@ -25,7 +25,7 @@ systems that means any attempt to use the library will result in a
 segfaulting executable. I'm looking into it.
 ---
 One and a half years later, I've picked this up again after simendsjo
-fixed some errors when compiling with the latest DMD. The samples_d is 
+fixed some errors when compiling with the latest DMD. The samples_d is
 still segfaulting. And it only gets that far with libtcod_debug.so, as
 the libtcod_text_* functions are only present there.
 Furthermore, 1.5.1 has been in limbo for a long time. I am continuing to
@@ -33,10 +33,9 @@ work on this when I can, but there are a lot of issues to work through.
 -Bernard 29/1/12.
 ---
 
-To try the sample, run make -f makefile-d-sample on Linux, or run 
-build_sample.bat on Windows.
+To try the samples, change to examples/samples_d and run dub.
 
-The bindings are a strict port of the C API, so refer to libtcod 
+The bindings are a strict port of the C API, so refer to libtcod
 documentation for more details. If I can get motivated, an object
 wrapper that would be similar to the C++ API may be forthcoming, so watch
 this space.
@@ -51,21 +50,21 @@ Developing with libtcod-d
 The libtcod-d code is maintained in a Git repository at github.org.
 If you are also using Git for your own project, you should consider
 using "git submodule" to add the libtcod-d repository as submodule
-under your project. If you have experience with svn externals, git 
+under your project. If you have experience with svn externals, git
 submodules are a similar feature.
- 
+
 Git submodules allow your repository to point at a single, static point
-in a separate repository as a child element. This avoids having to 
+in a separate repository as a child element. This avoids having to
 copy the code into your repo, etc.
 
-Git submodules use a frozen point - not "HEAD" or any of the branch 
+Git submodules use a frozen point - not "HEAD" or any of the branch
 heads - so that you can develop against a stable background. If you
-want to update the submodule to a later version of its own code, you 
+want to update the submodule to a later version of its own code, you
 have to do that explicitly. This keeps your environment stable until
 you ask for it to change.
 
 Of course, the best reason for using submodules is that you can clone
-the libtcod-d repository on github (or somewhere else), point your 
+the libtcod-d repository on github (or somewhere else), point your
 submodule at your clone, and make updates to the libtcod-d sources
 within the submodule directory. Then you can contribute to libtcod-d
 by pushing your changes back upstream. :)
