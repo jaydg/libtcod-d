@@ -302,28 +302,14 @@ enum : TCOD_bkgnd_flag_t {
         TCOD_BKGND_ALPH
 }
 
-version (D_Version2) {
-    mixin("
-    pure TCOD_bkgnd_flag_t TCOD_BKGND_ALPHA(T)(T alpha)
-    {
-        return (TCOD_BKGND_ALPH | (cast(ubyte)(alpha * 255) << 8));
-    }
+pure TCOD_bkgnd_flag_t TCOD_BKGND_ALPHA(T)(T alpha)
+{
+    return (TCOD_BKGND_ALPH | (cast(ubyte)(alpha * 255) << 8));
+}
 
-    pure TCOD_bkgnd_flag_t TCOD_BKGND_ADDALPHA(T)(T alpha)
-    {
-        return (TCOD_BKGND_ADDA | (cast(ubyte)(alpha * 255) << 8));
-    }
-    ");
-} else {
-    TCOD_bkgnd_flag_t TCOD_BKGND_ALPHA(T)(T alpha)
-    {
-        return (TCOD_BKGND_ALPH | (cast(ubyte)(alpha * 255) << 8));
-    }
-
-    TCOD_bkgnd_flag_t TCOD_BKGND_ADDALPHA(T)(T alpha)
-    {
-        return (TCOD_BKGND_ADDA | (cast(ubyte)(alpha * 255) << 8));
-    }
+pure TCOD_bkgnd_flag_t TCOD_BKGND_ADDALPHA(T)(T alpha)
+{
+    return (TCOD_BKGND_ADDA | (cast(ubyte)(alpha * 255) << 8));
 }
 
 enum {

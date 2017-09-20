@@ -14,9 +14,7 @@ import core.stdc.string;
 import sdl.c.video;
 import tcod.c.all;
 
-version (D_Version2) {
-    Mt19937 gen;
-}
+Mt19937 gen;
 
 /// Sample screen size.
 const int SAMPLE_SCREEN_WIDTH = 46;
@@ -78,11 +76,7 @@ class ColoursSample : Sample
         // ==== Slightly modify the corner colours. ====
         for (int i = 0; i < cols.length; i++) {
             // Move each corner colour.
-            version (D_Version2) {
-                int component = uniform(0, 3, gen);
-            } else {
-                int component = rand() % 3;
-            }
+            int component = uniform(0, 3, gen);
             switch (component) {
             case 0:
                 cols[i].r += 5 * dirr[i];
@@ -132,11 +126,7 @@ class ColoursSample : Sample
             for (int y = 0; y < SAMPLE_SCREEN_HEIGHT; y++) {
                 TCOD_color_t col = TCOD_console_get_back(sample_console, x, y);
                 col = TCOD_color_lerp(col, TCOD_black, 0.5f);
-                version (D_Version2) {
-                    int c = uniform('a', 'z' + 1, gen);
-                } else {
-                    int c = (rand() % (('z' - 'a') + 1)) + 'a';
-                }
+                int c = uniform('a', 'z' + 1, gen);
                 TCOD_console_set_foreground_color(sample_console, col);
                 TCOD_console_put_char(sample_console, x, y, c,
                                       TCOD_BKGND_NONE);
@@ -1584,13 +1574,8 @@ void main(string[] args)
             font_flags = 0;
         } else if (args[argn] == "-font-nb-char" && argn + 2 < args.length) {
             try {
-                version (D_Version2) {
-                    nb_char_horiz = parse!(int)(args[++argn]);
-                    nb_char_vertic = parse!(int)(args[++argn]);
-                } else {
-                    nb_char_horiz = toInt(args[++argn]);
-                    nb_char_vertic = toInt(args[++argn]);
-                }
+                nb_char_horiz = parse!(int)(args[++argn]);
+                nb_char_vertic = parse!(int)(args[++argn]);
             } catch (ConvException e) {
                 nb_char_horiz = 0;
                 nb_char_vertic = 0;
@@ -1599,13 +1584,8 @@ void main(string[] args)
             fullscreen = true;
         } else if (args[argn] == "-fullscreen-resolution" && argn + 2 < args.length) {
             try {
-                version (D_Version2) {
-                    fullscreen_width = parse!(int)(args[++argn]);
-                    fullscreen_height = parse!(int)(args[++argn]);
-                } else {
-                    fullscreen_width = toInt(args[++argn]);
-                    fullscreen_height = toInt(args[++argn]);
-                }
+                fullscreen_width = parse!(int)(args[++argn]);
+                fullscreen_height = parse!(int)(args[++argn]);
             } catch (ConvException e) {
                 fullscreen_width = 0;
                 fullscreen_height = 0;
