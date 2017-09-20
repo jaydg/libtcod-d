@@ -8,8 +8,8 @@ import std.string;
 import std.random;
 import std.math;
 import std.conv;
-import std.c.stdlib : malloc, free, exit;
-import std.c.string;
+import core.stdc.stdlib : malloc, free, exit;
+import core.stdc.string;
 
 import sdl.c.video;
 import tcod.c.all;
@@ -472,7 +472,7 @@ class NoiseSample : Sample
 
     enum { PERLIN, SIMPLEX, WAVELET, FBM_PERLIN, TURBULENCE_PERLIN,
             FBM_SIMPLEX, TURBULENCE_SIMPLEX, FBM_WAVELET, TURBULENCE_WAVELET }
-    string funcName[] = [
+    string[] funcName = [
         "1 : perlin noise       ",
         "2 : simplex noise      ",
         "3 : wavelet noise      ",
@@ -523,9 +523,9 @@ class FOVSample : Sample
         TCOD_console_set_foreground_color(sample_console, TCOD_white);
         TCOD_console_print_left(sample_console, 1, 0, TCOD_BKGND_NONE,
                                 "IJKL : move around\n"
-                                "T : torch fx %s\n"
-                                "W : light walls %s\n"
-                                "+-: algo %s\n",
+                                ~ "T : torch fx %s\n"
+                                ~ "W : light walls %s\n"
+                                ~ "+-: algo %s\n",
                                 torch ? on : off,
                                 light_walls ? on : off,
                                 toStringz(algo_names[algonum]));
@@ -760,11 +760,11 @@ class MouseSample : Sample
 
        TCOD_console_print_left(sample_console, 1, 1, TCOD_BKGND_NONE,
                                "Mouse position : %4dx%4d\n"
-                               "Mouse cell     : %4dx%4d\n"
-                               "Mouse movement : %4dx%4d\n"
-                               "Left button    : %s (toggle %s)\n"
-                               "Right button   : %s (toggle %s)\n"
-                               "Middle button  : %s (toggle %s)\n",
+                               ~ "Mouse cell     : %4dx%4d\n"
+                               ~ "Mouse movement : %4dx%4d\n"
+                               ~ "Left button    : %s (toggle %s)\n"
+                               ~ "Right button   : %s (toggle %s)\n"
+                               ~ "Middle button  : %s (toggle %s)\n",
                                mouse.x, mouse.y,
                                mouse.cx, mouse.cy,
                                mouse.dx, mouse.dy,
@@ -837,7 +837,7 @@ class PathSample : Sample
         }
         int x, y;
         if (recalculatePath) {
-            if (usingAstar) { 
+            if (usingAstar) {
                 TCOD_path_compute(path, px, py, dx, dy);
             } else {
                 dijkstraDist = 0.0f;
@@ -1185,10 +1185,10 @@ class BSPSample : Sample
         TCOD_console_set_foreground_color(sample_console, TCOD_white);
         TCOD_console_print_left(sample_console, 1, 1, TCOD_BKGND_NONE,
                                 "ENTER : rebuild bsp\n"
-                                "SPACE : rebuild dungeon\n"
-                                "+-: bsp depth %d\n"
-                                "*/: room size %d\n"
-                                "1: random room size %s",
+                                ~ "SPACE : rebuild dungeon\n"
+                                ~ "+-: bsp depth %d\n"
+                                ~ "*/: room size %d\n"
+                                ~ "1: random room size %s",
                                 bspDepth, minRoomSize,
                                 randomRoom ? on : off);
         if (randomRoom) {
@@ -1393,7 +1393,7 @@ void explode(SDL_Surface *screen, int samplex, int sampley, int samplew, int sam
 
 void blur(SDL_Surface *screen, int samplex, int sampley, int samplew, int sampleh) {
 	// let's blur that sample console
-	float f[3];
+	float[3] f;
         float n=0.0f;
 	int ridx=screen.format.Rshift/8;
 	int gidx=screen.format.Gshift/8;
