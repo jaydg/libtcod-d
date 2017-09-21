@@ -37,9 +37,9 @@ alias short int16;
 alias uint uint32;
 alias int int32;
 
-const int TCOD_HEXVERSION = 0x010500;
-const string TCOD_STRVERSION = "1.5.0";
-const int TCOD_TECHVERSION = 0x01050003;
+const int TCOD_HEXVERSION = 0x010501;
+const string TCOD_STRVERSION = "1.5.1";
+const int TCOD_TECHVERSION = 0x01050103;
 
 /******************************************
  utility macros
@@ -51,8 +51,14 @@ pure T CLAMP(T)(T a, T b, T x) { return (x < a) ? a : ((x > b) ? b : x); }
 pure T LERP(T)(T a, T b, T x) { return (a + x * (b - a)); }
 
 alias const(char)* charptr;
-version (Posix) mixin("alias const(dchar)* wchar_tptr;");
-version (Windows) mixin("alias const(wchar)* wchar_tptr;");
+version (Posix) {
+	alias const(dchar)* wchar_tptr;
+	alias dchar wchar_t;
+}
+version (Windows) {
+	alias const(wchar)* wchar_tptr;
+	alias wchar wchar_t;
+}
 
 public import tcod.c.types;
 public import tcod.c.functions;

@@ -92,7 +92,7 @@ void main()
         }
         if (functionName.length == 0) throw new Exception("Malformed function line.");
 
-        stdout.writeln("    ", functionName, " = cast(typeof(", functionName, ")) getSymbol(\"", functionName, "\");");
+        stdout.writeln("    ", functionName, " = getSymbol!(typeof(", functionName, "))(\"", functionName, "\");");
         stdout.writeln("    assert(", functionName, ");");
     }
 
