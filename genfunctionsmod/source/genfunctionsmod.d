@@ -7,6 +7,7 @@
  */
 module genfunctionsmod;
 
+import std.conv : to;
 import std.stdio;
 import std.ascii : isWhite;
 import std.string;
@@ -14,7 +15,22 @@ import std.string;
 
 void main()
 {
-    stdout.writeln("/// This module has been automatically generated.");
+    string[string] functions;
+
+	foreach (line; stdin.byLine) {
+        if (line.emptyOrWhitespace()) continue;
+
+        string[] functionParts = split(to!string(line), " ");
+        string functionDefinition = functionParts[0 .. $ - 1].join(" ");
+		string functionName = chop(functionParts[$ - 1]);
+        if (functionName.length == 0) {
+			throw new Exception("Malformed function line.");
+		}
+
+        functions[functionName] = functionDefinition;
+    }
+
+	stdout.writeln("/// This module has been automatically generated.");
     stdout.writeln("module tcod.c.functions;\n");
 
     stdout.writeln("version(Posix) {");
@@ -29,21 +45,18 @@ void main()
     stdout.writeln("import tcod.c.all;");
     stdout.writeln("import tcod.c.types;\n");
 
-    stdout.writeln("extern (C):\n");
-
-    string[] functions;
-    foreach (line; stdin.byLine) {
-        if (line.emptyOrWhitespace()) continue;
-        functions ~= line.idup;
-    }
-
     // Okay, first declare the function variables.
-    foreach (functionLine; functions) {
-        stdout.writeln("__gshared ", functionLine);
+	stdout.writeln("extern(C) @nogc nothrow {");
+    foreach (functionName, functionDefinition; functions) {
+        stdout.writeln("\t alias da_", functionName, " = ", functionDefinition, ";");
     }
-    stdout.writeln();
+    stdout.writeln("}\n");
 
-    stdout.writeln("extern (D):\n");
+	stdout.writeln("__gshared {");
+    foreach (functionName; functions.byKey()) {
+        stdout.writeln("\t da_", functionName, " ", functionName, ";");
+    }
+    stdout.writeln("}\n");
 
     stdout.writeln("private __gshared void* gTCODhandle;");
     stdout.writeln();
@@ -80,18 +93,7 @@ void main()
     stdout.writeln("    assert(gTCODhandle);\n");
 
     // Now load the functions from the shared object, asserting each time.
-    foreach (functionLine; functions) {
-        string[] functionParts = split(functionLine, " ");
-        string functionName = "";
-
-        foreach (functionPart; functionParts) {
-            if (functionPart.length >= 4 && functionPart[0 .. 4] == "TCOD" && functionPart[$ - 1] == ';') {
-                functionName = functionPart[0 .. $ - 1];  // Remove trailing semicolon.
-                break;
-            }
-        }
-        if (functionName.length == 0) throw new Exception("Malformed function line.");
-
+    foreach (functionName; functions.byKey()) {
         stdout.writeln("    ", functionName, " = getSymbol!(typeof(", functionName, "))(\"", functionName, "\");");
         stdout.writeln("    assert(", functionName, ");");
     }

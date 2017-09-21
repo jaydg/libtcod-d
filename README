@@ -15,17 +15,6 @@ on the current path (or dlls if on Windows). The current release build of
 libtcod.so 1.5.1 is lacking the functions TCOD_mouse_includes_touch and
 TCOD_sys_get_sdl_window, and will fail on attempting to load those functions.
 
-ATTENTION: There is a bug that occurs when using D2 versions on some
-systems that means any attempt to use the library will result in a
-segfaulting executable. I'm looking into it.
----
-One and a half years later, I've picked this up again after simendsjo
-fixed some errors when compiling with the latest DMD. The samples_d is
-still segfaulting. And it only gets that far with libtcod_debug.so, as
-the libtcod_text_* functions are only present there.
--Bernard 29/1/12.
----
-
 To try the samples, change to examples/samples_d and run dub.
 
 The bindings are a strict port of the C API, so refer to libtcod
