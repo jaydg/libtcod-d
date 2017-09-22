@@ -49,7 +49,7 @@ interface Sample
 {
     /// The sample's printable name.
     string name();
-    void render(bool first, ref TCOD_key_t key);
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse);
 }
 
 // The offscreen console in which the samples are rendered.
@@ -61,7 +61,7 @@ TCOD_console_t sample_console;
 class ColoursSample : Sample
 {
     string name() { return "  True colors        "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         enum { TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT }
         // Random corner colours.
@@ -163,7 +163,7 @@ class OffscreenSample : Sample
     }
 
     string name() { return "  Offscreen console  "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_sys_set_fps(30);
@@ -228,7 +228,7 @@ class LinesSample : Sample
     }
 
     string name() { return "  Line drawing       "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
 
         int xo, yo, xd, yd, x, y;  // Segment start, end, and current position.
@@ -319,7 +319,7 @@ class NoiseSample : Sample
     }
 
     string name() { return "  Noise              "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_sys_set_fps(30);
@@ -523,7 +523,7 @@ class FOVSample : Sample
     }
 
     string name() { return "  Field of view      "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         // Torch position and intensity variation.
         float dx = 0.0f, dy = 0.0f, di = 0.0f;
@@ -674,7 +674,7 @@ class ImageSample : Sample
 
     string name() { return "  Image toolkit      "; }
 
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_sys_set_fps(30);
@@ -732,7 +732,7 @@ class MouseSample : Sample
         off = toStringz("OFF");
     }
     string name() { return "  Mouse support      "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_console_set_default_background(sample_console, TCOD_grey);
@@ -743,7 +743,6 @@ class MouseSample : Sample
         }
 
         TCOD_console_clear(sample_console);
-        TCOD_mouse_t mouse = TCOD_mouse_get_status();
         if (mouse.lbutton_pressed) lbut = !lbut;
         if (mouse.rbutton_pressed) rbut = !rbut;
         if (mouse.mbutton_pressed) mbut = !mbut;
@@ -797,7 +796,7 @@ class PathSample : Sample
     }
 
     string name() { return "  Path finding       "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_sys_set_fps(30);
@@ -938,7 +937,6 @@ class PathSample : Sample
             recalculatePath = true;
         }
 
-        auto mouse = TCOD_mouse_get_status();
         int mx = mouse.cx - SAMPLE_SCREEN_X;
         int my = mouse.cy - SAMPLE_SCREEN_Y;
         if (mx >= 0 && mx < SAMPLE_SCREEN_WIDTH &&
@@ -1148,7 +1146,7 @@ class BSPSample : Sample
     }
 
     string name() { return "  Bsp toolkit        "; }
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (generate || refresh) {
             if (!bsp) {
@@ -1261,7 +1259,7 @@ class NameGeneratorSample : Sample
         nbSets = TCOD_list_size(sets);
     }
 
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_sys_set_fps(30);  // Limited to 30 FPS.
@@ -1525,7 +1523,7 @@ class SDLCallbackSample : Sample
 {
     string name() { return "  SDL callback       "; }
 
-    void render(bool first, ref TCOD_key_t key)
+    void render(bool first, ref TCOD_key_t key, ref TCOD_mouse_t mouse)
     {
         if (first) {
             TCOD_sys_set_fps(30);  // Limited to 30 FPS.
@@ -1558,6 +1556,7 @@ void main(string[] args)
     int font_new_flags = 0;
     int nb_char_horiz = 0, nb_char_vertic = 0;
     TCOD_key_t key = {TCODK_NONE, 0};
+    TCOD_mouse_t mouse;
     int fullscreen_width = 0;
     int fullscreen_height = 0;
     bool fullscreen = false;
@@ -1654,7 +1653,7 @@ void main(string[] args)
                            TCOD_console_is_fullscreen() ? toStringz("windowed mode  ")
                            : toStringz("fullscreen mode"));
 
-        samples[cur_sample].render(first, key);
+        samples[cur_sample].render(first, key, mouse);
         first = false;
 
         TCOD_console_blit(sample_console, 0, 0, SAMPLE_SCREEN_WIDTH,
@@ -1663,7 +1662,8 @@ void main(string[] args)
         TCOD_console_flush();
 
         // Did the user hit a key?
-        key = TCOD_console_check_for_keypress(TCOD_KEY_PRESSED);
+        TCOD_sys_check_for_event(cast(TCOD_event_t)(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE),
+                                 &key, &mouse);
         if (key.vk == TCODK_DOWN) {
             // Down arrow: next sample.
             cur_sample = (cur_sample + 1) % samples.length;
