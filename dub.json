@@ -5,5 +5,8 @@
 	"copyright": "Copyright © 2012, Bernard Helyer",
 	"authors": ["Bernard Helyer", "Joachim de Groot"],
 	"license": "BSD",
-	"targetType": "sourceLibrary"
+	"targetType": "sourceLibrary",
+	"copyFiles-linux-x86": ["libs/linux/x86/*"],
+	"copyFiles-linux-x86_64": ["libs/linux/x86_64/*"],
+	"copyFiles-windows-x86": ["libs/windows/x86/*"]
 }
