@@ -30,20 +30,21 @@ void main()
         functions[functionName] = functionDefinition;
     }
 
-	stdout.writeln("/// This module has been automatically generated.");
-    stdout.writeln("module tcod.c.functions;\n");
+    stdout.writeln(`/// This module has been automatically generated.
+module tcod.c.functions;
 
-    stdout.writeln("version(Posix) {");
-    stdout.writeln("    import core.sys.posix.dlfcn;");
-    stdout.writeln("} else {");
-    stdout.writeln("    import core.runtime;");
-    stdout.writeln("    import std.c.windows.windows;");
-    stdout.writeln("}\n");
+version(Posix) {
+    import core.sys.posix.dlfcn;
+} else {
+    import core.runtime;
+    import std.c.windows.windows;
+}
 
-    stdout.writeln("import std.string: toStringz;\n");
+import std.string: toStringz;
 
-    stdout.writeln("import tcod.c.all;");
-    stdout.writeln("import tcod.c.types;\n");
+import tcod.c.all;
+import tcod.c.types;
+`);
 
     // Okay, first declare the function variables.
 	stdout.writeln("extern(C) @nogc nothrow {");
@@ -56,41 +57,43 @@ void main()
     foreach (functionName; functions.byKey()) {
         stdout.writeln("\t da_", functionName, " ", functionName, ";");
     }
-    stdout.writeln("}\n");
-
-    stdout.writeln("private __gshared void* gTCODhandle;");
-    stdout.writeln();
-
-    stdout.writeln("private T getSymbol(T = void*)(string symbolName)");
-    stdout.writeln("{");
-    stdout.writeln("    version(Posix) {");
-    stdout.writeln("        return cast(T)dlsym(gTCODhandle, symbolName.toStringz);");
-    stdout.writeln("    } else {");
-    stdout.writeln("        return cast(T)GetProcAddress(cast(HMODULE)gTCODhandle, symbolName.toStringz);");
-    stdout.writeln("    }");
     stdout.writeln("}");
 
-    stdout.writeln("static ~this()\n{");
-    stdout.writeln("    version(Posix) {");
-    stdout.writeln("        dlclose(gTCODhandle);");
-    stdout.writeln("    } else {");
-    stdout.writeln("        Runtime.unloadLibrary(gTCODhandle);");
-    stdout.writeln("    }");
-    stdout.writeln("}\n");
+    stdout.writeln(`
+private __gshared void* gTCODhandle;
 
-    stdout.writeln("static this()\n{");
-    stdout.writeln("    version (Posix) {");
-    stdout.writeln(`        gTCODhandle = dlopen("./libtcod_debug.so".toStringz, RTLD_NOW);`);
-    stdout.writeln(`        if (!gTCODhandle) {`);
-    stdout.writeln(`            gTCODhandle = dlopen("./libtcod.so".toStringz, RTLD_NOW);`);
-    stdout.writeln(`        }`);
-    stdout.writeln("    } else {");
-    stdout.writeln(`        gTCODhandle = Runtime.loadLibrary("libtcod_debug.dll");`);
-    stdout.writeln(`        if (!gTCODhandle) {`);
-    stdout.writeln(`            gTCODhandle = Runtime.loadLibrary("libtcod.dll");`);
-    stdout.writeln(`        }`);
-    stdout.writeln("    }");
-    stdout.writeln("    assert(gTCODhandle);\n");
+private T getSymbol(T = void*)(string symbolName)
+{
+    version(Posix) {
+        return cast(T)dlsym(gTCODhandle, symbolName.toStringz);
+    } else {
+        return cast(T)GetProcAddress(cast(HMODULE)gTCODhandle, symbolName.toStringz);
+    }
+}
+
+static ~this() {
+    version(Posix) {
+        dlclose(gTCODhandle);
+    } else {
+        Runtime.unloadLibrary(gTCODhandle);
+    }
+}
+
+static this() {
+    version (Posix) {
+        gTCODhandle = dlopen("./libtcod_debug.so".toStringz, RTLD_NOW);
+        if (!gTCODhandle) {
+            gTCODhandle = dlopen("./libtcod.so".toStringz, RTLD_NOW);
+        }
+    } else {
+        gTCODhandle = Runtime.loadLibrary("libtcod_debug.dll");
+        if (!gTCODhandle) {
+            gTCODhandle = Runtime.loadLibrary("libtcod.dll");
+        }
+    }
+
+    assert(gTCODhandle);
+`);
 
     // Now load the functions from the shared object, asserting each time.
     foreach (functionName; functions.byKey()) {

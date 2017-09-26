@@ -791,8 +791,8 @@ private T getSymbol(T = void*)(string symbolName)
         return cast(T)GetProcAddress(cast(HMODULE)gTCODhandle, symbolName.toStringz);
     }
 }
-static ~this()
-{
+
+static ~this() {
     version(Posix) {
         dlclose(gTCODhandle);
     } else {
@@ -800,8 +800,7 @@ static ~this()
     }
 }
 
-static this()
-{
+static this() {
     version (Posix) {
         gTCODhandle = dlopen("./libtcod_debug.so".toStringz, RTLD_NOW);
         if (!gTCODhandle) {
@@ -813,6 +812,7 @@ static this()
             gTCODhandle = Runtime.loadLibrary("libtcod.dll");
         }
     }
+
     assert(gTCODhandle);
 
     TCOD_mouse_is_cursor_visible = getSymbol!(typeof(TCOD_mouse_is_cursor_visible))("TCOD_mouse_is_cursor_visible");
