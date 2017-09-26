@@ -1,9 +1,7 @@
-----------------------------------------
-           libtcod-d 1.5.1-1
-----------------------------------------
+# libtcod-d 1.5.1-1
 
 libtcod-d is a set of bindings for using the excellent
-libtcod ( http://doryen.eptalys.net/libtcod/ ) in the D programming language.
+[libtcod](http://doryen.eptalys.net/libtcod/) in the D programming language.
 
 The DLL (libtcod.so on Linux, libtcod.dll on Windows) is dynamically loaded
 on start up, not linked at compile time. Note that this means that on Linux
@@ -12,8 +10,8 @@ that your program runs.
 
 It searches for libtcod_debug.so, and if it can't find that, then libtcod.so
 on the current path (or dlls if on Windows). The current release build of
-libtcod.so 1.5.1 is lacking the functions TCOD_mouse_includes_touch and
-TCOD_sys_get_sdl_window, and will fail on attempting to load those functions.
+libtcod.so 1.5.1 is lacking the functions `TCOD_mouse_includes_touch` and
+`TCOD_sys_get_sdl_window`, and will fail on attempting to load those functions.
 
 To try the samples, change to examples/samples_d and run dub.
 
@@ -25,9 +23,7 @@ this space.
 For comments and complaints, use the issue system on GitHub.
 or email me at b (dot) helyer (at) gmail (dot) com.
 
-=========================
-Developing with libtcod-d
-=========================
+## Developing with libtcod-d
 
 The libtcod-d code is maintained in a Git repository at github.org.
 If you are also using Git for your own project, you should consider
