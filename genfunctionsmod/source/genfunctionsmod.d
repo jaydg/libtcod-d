@@ -30,78 +30,82 @@ void main()
         functions[functionName] = functionDefinition;
     }
 
-    stdout.writeln(`/// This module has been automatically generated.
+    stdout.write(`/// This module has been automatically generated.
+
 module tcod.c.functions;
 
-version(Posix) {
-    import core.sys.posix.dlfcn;
-} else {
-    import core.runtime;
-    import std.c.windows.windows;
-}
+import core.runtime : Runtime;
+import std.algorithm.iteration : map;
+import std.path : dirName, dirSeparator;
+import std.range : array;
+import std.string: join, toStringz;
 
-import std.string: toStringz;
+import derelict.util.loader;
+import derelict.util.system;
 
 import tcod.c.all;
 import tcod.c.types;
+
+extern(C) @nogc nothrow {
 `);
 
     // Okay, first declare the function variables.
-	stdout.writeln("extern(C) @nogc nothrow {");
     foreach (functionName, functionDefinition; functions) {
-        stdout.writeln("\t alias da_", functionName, " = ", functionDefinition, ";");
+        stdout.writeln("    alias da_", functionName, " = ", functionDefinition, ";");
     }
-    stdout.writeln("}\n");
 
-	stdout.writeln("__gshared {");
+    stdout.write(`}
+
+__gshared {
+`);
+
     foreach (functionName; functions.byKey()) {
-        stdout.writeln("\t da_", functionName, " ", functionName, ";");
-    }
-    stdout.writeln("}");
-
-    stdout.writeln(`
-private __gshared void* gTCODhandle;
-
-private T getSymbol(T = void*)(string symbolName)
-{
-    version(Posix) {
-        return cast(T)dlsym(gTCODhandle, symbolName.toStringz);
-    } else {
-        return cast(T)GetProcAddress(cast(HMODULE)gTCODhandle, symbolName.toStringz);
-    }
-}
-
-static ~this() {
-    version(Posix) {
-        dlclose(gTCODhandle);
-    } else {
-        Runtime.unloadLibrary(gTCODhandle);
-    }
-}
-
-static this() {
-    version (Posix) {
-        gTCODhandle = dlopen("./libtcod_debug.so".toStringz, RTLD_NOW);
-        if (!gTCODhandle) {
-            gTCODhandle = dlopen("./libtcod.so".toStringz, RTLD_NOW);
-        }
-    } else {
-        gTCODhandle = Runtime.loadLibrary("libtcod_debug.dll");
-        if (!gTCODhandle) {
-            gTCODhandle = Runtime.loadLibrary("libtcod.dll");
-        }
+        stdout.writeln("    da_", functionName, " ", functionName, ";");
     }
 
-    assert(gTCODhandle);
+    stdout.write(`}
+
+class DerelictTCODLoader : SharedLibLoader {
+    this(string libNames) {
+        super(libNames);
+    }
+
+    ~this() {
+        unload();
+    }
+
+    override void loadSymbols()
+    {
 `);
 
     // Now load the functions from the shared object, asserting each time.
     foreach (functionName; functions.byKey()) {
-        stdout.writeln("    ", functionName, " = getSymbol!(typeof(", functionName, "))(\"", functionName, "\");");
-        stdout.writeln("    assert(", functionName, ");");
+        stdout.writeln("        bindFunc(cast(void**)&", functionName, ", \"", functionName, "\");");
     }
 
-    stdout.writeln("}\n");
+stdout.write(`    }
+}
+
+__gshared DerelictTCODLoader DerelictTCOD;
+
+shared static this()
+{
+    string[] libNames;
+    if(Derelict_OS_Windows) {
+        libNames = ["libtcod_debug.dll", "libtcod.dll"];
+    } else if(Derelict_OS_Linux) {
+        libNames = ["libtcod_debug.so", "libtcod.so"];
+
+        // prepend executable path to library names
+        string path = dirName(Runtime.args[0]);
+        libNames = array(map!(e => path ~ dirSeparator ~ e)(libNames));
+    } else
+    assert(0, "libtcod-d is not supported on this operating system.");
+
+    DerelictTCOD = new DerelictTCODLoader(join(libNames, ','));
+    DerelictTCOD.load();
+}
+`);
 }
 
 /**
