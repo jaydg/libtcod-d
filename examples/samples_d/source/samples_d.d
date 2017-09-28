@@ -1670,8 +1670,11 @@ void main(string[] args)
             first = true;
         } else if (key.vk == TCODK_UP) {
             // Up arrow: previous sample.
-            cur_sample--;
-            if (cur_sample < 0) cur_sample = samples.length - 1;
+            if (cur_sample == 0) {
+                cur_sample = cast(int)samples.length - 1;
+            } else {
+                cur_sample--;
+            }
             first = true;
         } else if (key.vk == TCODK_ENTER && key.lalt) {
             // ALT-ENTER: Toggle fullscreen.
