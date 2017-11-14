@@ -5,11 +5,30 @@
 	"copyright": "Copyright © 2012, Bernard Helyer",
 	"authors": ["Bernard Helyer", "Joachim de Groot"],
 	"license": "BSD",
-	"targetType": "sourceLibrary",
 	"copyFiles-linux-x86": ["libs/linux/x86/*"],
 	"copyFiles-linux-x86_64": ["libs/linux/x86_64/*"],
 	"copyFiles-windows-x86": ["libs/windows/x86/*"],
 	"dependencies": {
 		"derelict-util": "~>3.0.0-beta.2"
-	}
+	},
+	"configurations": [
+		{
+			"name": "default",
+			"targetType": "sourceLibrary"
+		},
+		{
+			"name": "samples_d",
+			"mainSourceFile" : "examples/samples_d",
+			"targetName": "samples_d",
+			"targetType": "executable",
+			"targetPath": "bin"
+		},
+		{
+			"name": "simple",
+			"mainSourceFile" : "examples/simple.d",
+			"targetName": "simple",
+			"targetType": "executable",
+			"targetPath": "bin"
+		}
+	]
 }

@@ -16,7 +16,7 @@ ATTENTION: the x86_64 version of the Linux library seems to be very unstable
 and the demo application crashed immediately upon startup. The x86 variant
 works almost fine, though.
 
-To try the samples, change to examples/samples_d and run dub.
+To try the samples, run `dub run -a x86 -c samples_d`
 
 The bindings are a strict port of the C API, so refer to libtcod
 documentation for more details. If I can get motivated, an object
