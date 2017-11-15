@@ -1,6 +1,4 @@
-*.o
-*.obj
-a.out
-*.exe
-genfunctionsmod
+bin/
 
+.dub
+dub.selections.json

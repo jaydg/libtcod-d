@@ -1,0 +1,11 @@
+{
+    "name":         "genfunctionsmod",
+    "description":  "libtcod functions wrapper helper",
+    "homepage":     "https://github.com/bhelyer/libtcod-d",
+    "authors":      [ "Bernard Helyer" ],
+    "license":      "BSD",
+    "targetPath":   "../bin",
+    "targetType":   "executable",
+    "targetName":   "genfunctionsmod"
+}
+

@@ -36,46 +36,29 @@ alias ushort uint16;
 alias short int16;
 alias uint uint32;
 alias int int32;
-version (Tango) alias char[] string;
 
-const int TCOD_HEXVERSION = 0x010500;
-const string TCOD_STRVERSION = "1.5.0";
-const int TCOD_TECHVERSION = 0x01050003;
+const int TCOD_HEXVERSION = 0x010501;
+const string TCOD_STRVERSION = "1.5.1";
+const int TCOD_TECHVERSION = 0x01050103;
 
 /******************************************
  utility macros
  ******************************************/
-version (D_Version2) {
-    mixin("
-    pure T MAX(T)(T a, T b) { return (a < b) ? b : a; }
-    pure T MIN(T)(T a, T b) { return (a > b) ? b : a; }
-    pure T ABS(T)(T a) { return (a < 0) ? -a : a; }
-    pure T CLAMP(T)(T a, T b, T x) { return (x < a) ? a : ((x > b) ? b : x); }
-    pure T LERP(T)(T a, T b, T x) { return (a + x * (b - a)); }
-    ");
-} else {
-    T MAX(T)(T a, T b) { return (a < b) ? b : a; }
-    T MIN(T)(T a, T b) { return (a > b) ? b : a; }
-    T ABS(T)(T a) { return (a < 0) ? -a : a; }
-    T CLAMP(T)(T a, T b, T x) { return (x < a) ? a : ((x > b) ? b : x); }
-    T LERP(T)(T a, T b, T x) { return (a + x * (b - a)); }
-}
+pure T MAX(T)(T a, T b) { return (a < b) ? b : a; }
+pure T MIN(T)(T a, T b) { return (a > b) ? b : a; }
+pure T ABS(T)(T a) { return (a < 0) ? -a : a; }
+pure T CLAMP(T)(T a, T b, T x) { return (x < a) ? a : ((x > b) ? b : x); }
+pure T LERP(T)(T a, T b, T x) { return (a + x * (b - a)); }
 
-version (D_Version2) {
-    /*
-     * All code must be valid for any compiler even if it
-     * it won't be getting included. These aren't valid for
-     * DMD 1, hence the mixins.
-     */
-    mixin("alias const(char)* charptr;");
-    version (Posix) mixin("alias const(dchar)* wchar_tptr;");
-    version (Windows) mixin("alias const(wchar)* wchar_tptr;");
-} else {
-    alias char* charptr;
-    version (Posix) alias dchar* wchar_tptr;
-    version (Windows) alias wchar* wchar_tptr;
+alias const(char)* charptr;
+version (Posix) {
+	alias const(dchar)* wchar_tptr;
+	alias dchar wchar_t;
+}
+version (Windows) {
+	alias const(wchar)* wchar_tptr;
+	alias wchar wchar_t;
 }
 
 public import tcod.c.types;
 public import tcod.c.functions;
-
