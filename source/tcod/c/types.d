@@ -13,9 +13,6 @@ struct TCOD_color_t {
     ubyte r,g,b;
 }
 
-const int TCOD_COLOR_NB = 12;
-const int TCOD_COLOR_LEVELS = 6;
-
 // color names
 enum {
     TCOD_COLOR_RED,
@@ -39,6 +36,7 @@ enum {
     TCOD_COLOR_MAGENTA,
     TCOD_COLOR_PINK,
     TCOD_COLOR_CRIMSON,
+    TCOD_COLOR_NB,
 }
 
 // color levels
@@ -51,6 +49,7 @@ enum {
     TCOD_COLOR_DARK,
     TCOD_COLOR_DARKER,
     TCOD_COLOR_DARKEST,
+    TCOD_COLOR_LEVELS,
 }
 
 // color array
