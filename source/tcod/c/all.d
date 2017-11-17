@@ -52,12 +52,12 @@ pure T LERP(T)(T a, T b, T x) { return (a + x * (b - a)); }
 
 alias const(char)* charptr;
 version (Posix) {
-	alias const(dchar)* wchar_tptr;
-	alias dchar wchar_t;
+    alias const(dchar)* wchar_tptr;
+    alias dchar wchar_t;
 }
 version (Windows) {
-	alias const(wchar)* wchar_tptr;
-	alias wchar wchar_t;
+    alias const(wchar)* wchar_tptr;
+    alias wchar wchar_t;
 }
 
 public import tcod.c.types;
