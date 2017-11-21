@@ -12,11 +12,13 @@ on the executable's path (or dlls if on Windows). The current release build of
 libtcod.so 1.5.1 is lacking the functions `TCOD_mouse_includes_touch` and
 `TCOD_sys_get_sdl_window`, and will fail on attempting to load those functions.
 
-ATTENTION: the x86_64 version of the Linux library seems to be very unstable
-and the demo application crashed immediately upon startup. The x86 variant
-works almost fine, though.
+ATTENTION: the x86_64 version of the library doesnt't work with DMD; the
+sample application crashes immediately as some function calls simply don't
+work - the parameters are totally garbled. Please use LDC to compile
+applications on x86_64 platforms.
 
-To try the samples, run `dub run -a x86 -c samples_d`
+To try the samples, run `dub run -c samples_d` on 32bit platforms or
+`dub run --compiler ldc2 -c samples_d` on 64bit platforms.
 
 The bindings are a strict port of the C API, so refer to libtcod
 documentation for more details. If I can get motivated, an object
