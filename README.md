@@ -24,7 +24,6 @@ wrapper that would be similar to the C++ API may be forthcoming, so watch
 this space.
 
 For comments and complaints, use the issue system on GitHub.
-or email me at b (dot) helyer (at) gmail (dot) com.
 
 ## Developing with libtcod-d
 
