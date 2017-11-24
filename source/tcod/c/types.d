@@ -479,7 +479,8 @@ enum : TCOD_bkgnd_flag_t {
     TCOD_BKGND_ADDA,
     TCOD_BKGND_BURN,
     TCOD_BKGND_OVERLAY,
-    TCOD_BKGND_ALPH
+    TCOD_BKGND_ALPH,
+    TCOD_BKGND_DEFAULT
 }
 
 pure TCOD_bkgnd_flag_t TCOD_BKGND_ALPHA(T)(T alpha)
