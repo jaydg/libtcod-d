@@ -123,8 +123,22 @@ public:
     TCODColor myCopiedColor(myOtherColor);
     ---
     */
-    this(const ref TCODColor col)
+    this(ref TCODColor col)
     {
+        this.r = col.r;
+        this.g = col.g;
+        this.b = col.b;
+    }
+
+    /**
+    Create a color from a TCOD_color_t.
+
+    Example:
+    ---
+    TCODColor myCopiedColor(myOtherColor);
+    ---
+    */
+    this(TCOD_color_t col) {
         this.r = col.r;
         this.g = col.g;
         this.b = col.b;
