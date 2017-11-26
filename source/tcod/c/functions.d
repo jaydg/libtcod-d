@@ -38,7 +38,7 @@ extern(C) @nogc nothrow {
     alias da_TCOD_noise_get = float function(TCOD_noise_t, float*);
     alias da_TCOD_random_restore = void function(TCOD_random_t, TCOD_random_t);
     alias da_TCOD_sys_create_directory = bool function(charptr);
-    alias da_TCOD_thread_new = TCOD_thread_t function(int);
+    alias da_TCOD_thread_new = TCOD_thread_t function(int function(void*)*, void*);
     alias da_TCOD_zip_put_string = void function(TCOD_zip_t, charptr);
     alias da_TCOD_path_get_origin = void function(TCOD_path_t, int*, int*);
     alias da_TCOD_image_put_pixel = void function(TCOD_image_t, int, int, TCOD_color_t);

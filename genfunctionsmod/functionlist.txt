@@ -320,7 +320,7 @@ bool function(charptr, charptr*, uint32*) TCOD_sys_read_file;
 bool function(charptr, charptr, uint32) TCOD_sys_write_file;
 void function(charptr) TCOD_sys_clipboard_set;
 charptr function() TCOD_sys_clipboard_get;
-TCOD_thread_t function(int) TCOD_thread_new;
+TCOD_thread_t function(int function(void*)*, void*) TCOD_thread_new;
 void function(TCOD_thread_t) TCOD_thread_delete;
 int function() TCOD_sys_get_num_cores;
 void function(TCOD_thread_t) TCOD_thread_wait;
