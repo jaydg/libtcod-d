@@ -130,6 +130,7 @@ void function(TCOD_heightmap_t*, float, float, float[3], float) TCOD_heightmap_g
 int function(TCOD_heightmap_t*, float, float) TCOD_heightmap_count_cells;
 bool function(TCOD_heightmap_t*, float) TCOD_heightmap_has_land_on_border;
 void function(TCOD_heightmap_t*, float*, float*) TCOD_heightmap_get_minmax;
+void function(const TCOD_heightmap_t*, TCOD_heightmap_t*) TCOD_heightmap_copy;
 void function(TCOD_heightmap_t*, float) TCOD_heightmap_add;
 void function(TCOD_heightmap_t*, float) TCOD_heightmap_scale;
 void function(TCOD_heightmap_t*, float, float) TCOD_heightmap_clamp;
