@@ -7,6 +7,7 @@
  */
 module genfunctionsmod;
 
+import std.algorithm : sort;
 import std.conv : to;
 import std.stdio;
 import std.ascii : isWhite;
@@ -50,8 +51,8 @@ extern(C) @nogc nothrow {
 `);
 
     // Okay, first declare the function variables.
-    foreach (functionName, functionDefinition; functions) {
-        stdout.writeln("    alias da_", functionName, " = ", functionDefinition, ";");
+    foreach (func; sort(functions.keys)) {
+        stdout.writeln("    alias da_", func, " = ", functions[func], ";");
     }
 
     stdout.write(`}
@@ -59,7 +60,7 @@ extern(C) @nogc nothrow {
 __gshared {
 `);
 
-    foreach (functionName; functions.byKey()) {
+    foreach (functionName; sort(functions.keys)) {
         stdout.writeln("    da_", functionName, " ", functionName, ";");
     }
 
@@ -79,7 +80,7 @@ class DerelictTCODLoader : SharedLibLoader {
 `);
 
     // Now load the functions from the shared object, asserting each time.
-    foreach (functionName; functions.byKey()) {
+    foreach (functionName; sort(functions.keys)) {
         stdout.writeln("        bindFunc(cast(void**)&", functionName, ", \"", functionName, "\");");
     }
 
