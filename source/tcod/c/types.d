@@ -778,11 +778,11 @@ alias void *TCOD_parser_struct_t;
 
 /* parser listener */
 struct TCOD_parser_listener_t {
-    bool function(TCOD_parser_struct_t str, charptr name) new_struct;
-    bool function(charptr name) new_flag;
-    bool function(charptr propname, TCOD_value_type_t type, TCOD_value_t value) new_property;
-    bool function(TCOD_parser_struct_t str,  charptr name) end_struct;
-    void function(charptr msg) error;
+    bool function(TCOD_parser_struct_t str, const charptr name) new_struct;
+    bool function(const charptr name) new_flag;
+    bool function(const charptr propname, TCOD_value_type_t type, TCOD_value_t value) new_property;
+    bool function(TCOD_parser_struct_t str, const charptr name) end_struct;
+    void function(const charptr msg) error;
 }
 
 /* a custom type parser */
