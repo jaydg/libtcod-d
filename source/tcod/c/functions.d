@@ -101,7 +101,7 @@ extern(C) @nogc nothrow {
     alias da_TCOD_console_print_rect_ex = int function(TCOD_console_t, int, int, int, int, TCOD_bkgnd_flag_t, TCOD_alignment_t, charptr, ...);
     alias da_TCOD_console_print_rect_ex_utf = int function(TCOD_console_t, int, int, int, int, TCOD_bkgnd_flag_t, TCOD_alignment_t, wchar_tptr, ...);
     alias da_TCOD_console_print_rect_utf = int function(TCOD_console_t,int, int, int, int, wchar_tptr, ...);
-    alias da_TCOD_console_print_utf = void function(TCOD_console_t, int, int, const wchar_t, ...);
+    alias da_TCOD_console_print_utf = void function(TCOD_console_t, int, int, wchar_tptr, ...);
     alias da_TCOD_console_put_char = void function(TCOD_console_t, int, int, int, TCOD_bkgnd_flag_t);
     alias da_TCOD_console_put_char_ex = void function(TCOD_console_t, int, int, int, TCOD_color_t, TCOD_color_t);
     alias da_TCOD_console_rect = void function(TCOD_console_t, int, int, int, int, bool, TCOD_bkgnd_flag_t);

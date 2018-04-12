@@ -73,7 +73,7 @@ void function(TCOD_console_t, int, int, int, TCOD_bkgnd_flag_t) TCOD_console_hli
 void function(TCOD_console_t, int, int, int, TCOD_bkgnd_flag_t) TCOD_console_vline;
 void function(TCOD_console_t, int, int, int, int, bool, TCOD_bkgnd_flag_t, charptr, ...) TCOD_console_print_frame;
 void function(wchar_tptr, int, int) TCOD_console_map_string_to_font_utf;
-void function(TCOD_console_t, int, int, const wchar_t, ...) TCOD_console_print_utf;
+void function(TCOD_console_t, int, int, wchar_tptr, ...) TCOD_console_print_utf;
 void function(TCOD_console_t, int, int, TCOD_bkgnd_flag_t, TCOD_alignment_t, wchar_tptr, ...) TCOD_console_print_ex_utf;
 int function(TCOD_console_t,int, int, int, int, wchar_tptr, ...) TCOD_console_print_rect_utf;
 int function(TCOD_console_t, int, int, int, int, TCOD_bkgnd_flag_t, TCOD_alignment_t, wchar_tptr, ...) TCOD_console_print_rect_ex_utf;
