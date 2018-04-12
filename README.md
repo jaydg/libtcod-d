@@ -1,4 +1,4 @@
-# libtcod-d 1.5.1-1
+# libtcod-d 1.5.1-2
 
 libtcod-d is a set of bindings for using the excellent
 [libtcod](http://roguecentral.org/doryen/libtcod/) in the D programming
