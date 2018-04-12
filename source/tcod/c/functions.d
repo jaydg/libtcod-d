@@ -191,7 +191,7 @@ extern(C) @nogc nothrow {
     alias da_TCOD_lex_expect_token_value = bool function(TCOD_lex_t*, int, charptr);
     alias da_TCOD_lex_get_last_error = char* function();
     alias da_TCOD_lex_get_last_javadoc = char* function(TCOD_lex_t*);
-    alias da_TCOD_lex_get_token_name = const char* function(int);
+    alias da_TCOD_lex_get_token_name = charptr function(int);
     alias da_TCOD_lex_hextoint = int function(char);
     alias da_TCOD_lex_new = TCOD_lex_t* function(charptr*, charptr*, charptr, charptr, charptr, charptr, charptr, int);
     alias da_TCOD_lex_new_intern = TCOD_lex_t* function();
@@ -329,7 +329,7 @@ extern(C) @nogc nothrow {
     alias da_TCOD_struct_add_structure = void function(TCOD_parser_struct_t, TCOD_parser_struct_t);
     alias da_TCOD_struct_add_value_list = void function(TCOD_parser_struct_t, charptr, charptr*, bool);
     alias da_TCOD_struct_add_value_list_sized = void function(TCOD_parser_struct_t, charptr, charptr*, int, bool);
-    alias da_TCOD_struct_get_name = const char* function(TCOD_parser_struct_t);
+    alias da_TCOD_struct_get_name = charptr function(TCOD_parser_struct_t);
     alias da_TCOD_struct_get_type = TCOD_value_type_t function(TCOD_parser_struct_t, charptr);
     alias da_TCOD_struct_is_mandatory = bool function(TCOD_parser_struct_t, charptr);
     alias da_TCOD_sys_check_for_event = TCOD_event_t function(int, TCOD_key_t*, TCOD_mouse_t*);

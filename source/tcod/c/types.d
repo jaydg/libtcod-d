@@ -696,9 +696,9 @@ struct TCOD_lex_t {
     int nb_symbols, nb_keywords, flags;
     char[TCOD_LEX_SYMBOL_SIZE][TCOD_LEX_MAX_SYMBOLS] symbols;
     char[TCOD_LEX_KEYWORD_SIZE][TCOD_LEX_MAX_KEYWORDS] keywords;
-    const char *simpleCmt;
-    const char* cmtStart, cmtStop, javadocCmtStart;
-    const char *stringDelim;
+    charptr simpleCmt;
+    charptr cmtStart, cmtStop, javadocCmtStart;
+    charptr stringDelim;
     bool javadoc_read;
     bool allocBuf;
     bool savept; // is this object a savepoint (no free in destructor)
