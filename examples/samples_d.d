@@ -747,23 +747,23 @@ class MouseSample : Sample
         if (mouse.rbutton_pressed) rbut = !rbut;
         if (mouse.mbutton_pressed) mbut = !mbut;
 
-       TCOD_console_print(sample_console, 1, 1,
-                               "Mouse position : %4dx%4d\n"
-                               ~ "Mouse cell     : %4dx%4d\n"
-                               ~ "Mouse movement : %4dx%4d\n"
-                               ~ "Left button    : %s (toggle %s)\n"
-                               ~ "Right button   : %s (toggle %s)\n"
-                               ~ "Middle button  : %s (toggle %s)\n",
-                               mouse.x, mouse.y,
-                               mouse.cx, mouse.cy,
-                               mouse.dx, mouse.dy,
-                               mouse.lbutton ? on : off, lbut ? on : off,
-                               mouse.rbutton ? on : off, rbut ? on : off,
-                               mouse.mbutton ? on : off, mbut ? on : off);
-       TCOD_console_print(sample_console, 1, 10,
-                               "1 : Hide cursor\n2 : Show cursor");
-       if (key.c == '1') TCOD_mouse_show_cursor(false);
-       else if (key.c == '2') TCOD_mouse_show_cursor(true);
+        TCOD_console_print(sample_console, 1, 1,
+                                "Mouse position : %4dx%4d\n"
+                                ~ "Mouse cell     : %4dx%4d\n"
+                                ~ "Mouse movement : %4dx%4d\n"
+                                ~ "Left button    : %s (toggle %s)\n"
+                                ~ "Right button   : %s (toggle %s)\n"
+                                ~ "Middle button  : %s (toggle %s)\n",
+                                mouse.x, mouse.y,
+                                mouse.cx, mouse.cy,
+                                mouse.dx, mouse.dy,
+                                mouse.lbutton ? on : off, lbut ? on : off,
+                                mouse.rbutton ? on : off, rbut ? on : off,
+                                mouse.mbutton ? on : off, mbut ? on : off);
+        TCOD_console_print(sample_console, 1, 10,
+                                "1 : Hide cursor\n2 : Show cursor");
+        if (key.c == '1') TCOD_mouse_show_cursor(false);
+        else if (key.c == '2') TCOD_mouse_show_cursor(true);
     }
 
     bool lbut = false;
@@ -1714,4 +1714,3 @@ void usage()
     writefln("-fullscreen-resolution <screen_width> <screen_height>: force fullscreen resolution.");
     writefln("-help: print this message, and exit.");
 }
-
