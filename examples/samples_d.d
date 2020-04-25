@@ -146,6 +146,18 @@ class ColoursSample : Sample
 /// =========================
 class OffscreenSample : Sample
 {
+    private:
+
+    TCOD_console_t secondary;
+    TCOD_console_t screenshot;
+    int counter;
+    int x = 0;
+    int y = 0;
+    int xdir = 1;
+    int ydir = 1;
+
+    public:
+
     this()
     {
 
@@ -186,14 +198,6 @@ class OffscreenSample : Sample
         TCOD_console_blit(secondary, 0, 0, SAMPLE_SCREEN_WIDTH / 2, SAMPLE_SCREEN_HEIGHT / 2,
                           sample_console, x, y, 1.0f, 0.75f);
     }
-
-    TCOD_console_t secondary;
-    TCOD_console_t screenshot;
-    int counter;
-    int x = 0;
-    int y = 0;
-    int xdir = 1;
-    int ydir = 1;
 }
 
 /// ====================
@@ -211,6 +215,27 @@ extern (C) bool line_listener(int x, int y)
 
 class LinesSample : Sample
 {
+    private:
+
+    TCOD_console_t bk;  /// Coloured background.
+
+    static string[] flag_names = [
+        "TCOD_BKGND_NONE",
+        "TCOD_BKGND_SET",
+        "TCOD_BKGND_MULTIPLY",
+        "TCOD_BKGND_LIGHTEN",
+        "TCOD_BKGND_DARKEN",
+        "TCOD_BKGND_SCREEN",
+        "TCOD_BKGND_COLOR_DODGE",
+        "TCOD_BKGND_COLOR_BURN",
+        "TCOD_BKGND_ADD",
+        "TCOD_BKGND_ADDALPHA",
+        "TCOD_BKGND_BURN",
+        "TCOD_BKGND_OVERLAY",
+        "TCOD_BKGND_ALPHA"];
+
+    public:
+
     this()
     {
         bk = TCOD_console_new(SAMPLE_SCREEN_WIDTH, SAMPLE_SCREEN_HEIGHT);
@@ -288,23 +313,6 @@ class LinesSample : Sample
         TCOD_console_print(sample_console, 2, 2,
                                 "%s (ENTER to change)", toStringz(flag_names[bk_flag & 0xff]));
     }
-
-    TCOD_console_t bk;  /// Coloured background.
-
-    static string[] flag_names = [
-        "TCOD_BKGND_NONE",
-        "TCOD_BKGND_SET",
-        "TCOD_BKGND_MULTIPLY",
-        "TCOD_BKGND_LIGHTEN",
-        "TCOD_BKGND_DARKEN",
-        "TCOD_BKGND_SCREEN",
-        "TCOD_BKGND_COLOR_DODGE",
-        "TCOD_BKGND_COLOR_BURN",
-        "TCOD_BKGND_ADD",
-        "TCOD_BKGND_ADDALPHA",
-        "TCOD_BKGND_BURN",
-        "TCOD_BKGND_OVERLAY",
-        "TCOD_BKGND_ALPHA"];
 }
 
 /// =============
@@ -312,6 +320,32 @@ class LinesSample : Sample
 /// =============
 class NoiseSample : Sample
 {
+    private:
+
+    enum { PERLIN, SIMPLEX, WAVELET, FBM_PERLIN, TURBULENCE_PERLIN,
+            FBM_SIMPLEX, TURBULENCE_SIMPLEX, FBM_WAVELET, TURBULENCE_WAVELET }
+    string[] funcName = [
+        "1 : perlin noise       ",
+        "2 : simplex noise      ",
+        "3 : wavelet noise      ",
+        "4 : perlin fbm         ",
+        "5 : perlin turbulence  ",
+        "6 : simplex fbm        ",
+        "7 : simplex turbulence ",
+        "8 : wavelet fbm        ",
+        "9 : wavelet turbulence "];
+    int func = PERLIN;
+    TCOD_noise_t noise;
+    float dx = 0.0f;
+    float dy = 0.0f;
+    float octaves = 4.0f;
+    float hurst = TCOD_NOISE_DEFAULT_HURST;
+    float lacunarity = TCOD_NOISE_DEFAULT_LACUNARITY;
+    TCOD_image_t img = null;
+    float zoom = 3.0f;
+
+    public:
+
     this()
     {
         noise = TCOD_noise_new(2, hurst, lacunarity, null);
@@ -459,28 +493,6 @@ class NoiseSample : Sample
             zoom -= 0.2f;
         }
     }
-
-    enum { PERLIN, SIMPLEX, WAVELET, FBM_PERLIN, TURBULENCE_PERLIN,
-            FBM_SIMPLEX, TURBULENCE_SIMPLEX, FBM_WAVELET, TURBULENCE_WAVELET }
-    string[] funcName = [
-        "1 : perlin noise       ",
-        "2 : simplex noise      ",
-        "3 : wavelet noise      ",
-        "4 : perlin fbm         ",
-        "5 : perlin turbulence  ",
-        "6 : simplex fbm        ",
-        "7 : simplex turbulence ",
-        "8 : wavelet fbm        ",
-        "9 : wavelet turbulence "];
-    int func = PERLIN;
-    TCOD_noise_t noise;
-    float dx = 0.0f;
-    float dy = 0.0f;
-    float octaves = 4.0f;
-    float hurst = TCOD_NOISE_DEFAULT_HURST;
-    float lacunarity = TCOD_NOISE_DEFAULT_LACUNARITY;
-    TCOD_image_t img = null;
-    float zoom = 3.0f;
 }
 
 /// ===========
@@ -491,6 +503,32 @@ const float SQUARED_TORCH_RADIUS = (TORCH_RADIUS * TORCH_RADIUS);
 
 class FOVSample : Sample
 {
+    private:
+
+    int px = 20, py = 10;  // Player position.
+    bool recompute_fov = true;
+    bool torch = false;
+    bool light_walls = true;
+    TCOD_map_t map = null;
+    TCOD_color_t dark_wall = {0, 0, 100};
+    TCOD_color_t light_wall = {130, 110, 50};
+    TCOD_color_t dark_ground = {50, 50, 150};
+    TCOD_color_t light_ground = {200, 180, 50};
+    TCOD_noise_t noise;
+    int algonum = 0;
+    string[] algo_names = [
+        "BASIC      ",
+        "DIAMOND    ",
+        "SHADOW     ",
+        "PERMISSIVE0", "PERMISSIVE1", "PERMISSIVE2", "PERMISSIVE3",
+        "PERMISSIVE4", "PERMISSIVE5", "PERMISSIVE6", "PERMISSIVE7",
+        "PERMISSIVE8", "RESTRICTIVE"];
+    float torchx = 0.0f;   /// Torch light position in the Perlin Noise.
+    charptr on = null;
+    charptr off = null;
+
+    public:
+
     this()
     {
         map = TCOD_map_new(SAMPLE_SCREEN_WIDTH, SAMPLE_SCREEN_HEIGHT);
@@ -636,28 +674,6 @@ class FOVSample : Sample
             recompute_fov = true;
         }
     }
-
-    int px = 20, py = 10;  // Player position.
-    bool recompute_fov = true;
-    bool torch = false;
-    bool light_walls = true;
-    TCOD_map_t map = null;
-    TCOD_color_t dark_wall = {0, 0, 100};
-    TCOD_color_t light_wall = {130, 110, 50};
-    TCOD_color_t dark_ground = {50, 50, 150};
-    TCOD_color_t light_ground = {200, 180, 50};
-    TCOD_noise_t noise;
-    int algonum = 0;
-    string[] algo_names = [
-        "BASIC      ",
-        "DIAMOND    ",
-        "SHADOW     ",
-        "PERMISSIVE0", "PERMISSIVE1", "PERMISSIVE2", "PERMISSIVE3",
-        "PERMISSIVE4", "PERMISSIVE5", "PERMISSIVE6", "PERMISSIVE7",
-        "PERMISSIVE8", "RESTRICTIVE"];
-    float torchx = 0.0f;   /// Torch light position in the Perlin Noise.
-    charptr on = null;
-    charptr off = null;
 }
 
 /// =============
@@ -665,6 +681,15 @@ class FOVSample : Sample
 /// =============
 class ImageSample : Sample
 {
+    private:
+
+    TCOD_image_t img = null;
+    TCOD_image_t circle = null;
+    TCOD_color_t blue = {0, 0, 255};
+    TCOD_color_t green = {0, 255, 0};
+
+    public:
+
     this()
     {
         img = TCOD_image_load("data/img/skull.png");
@@ -711,11 +736,6 @@ class ImageSample : Sample
         TCOD_image_blit(img, sample_console, x, y,
                         TCOD_BKGND_SET, scalex, scaley, angle);
     }
-
-    TCOD_image_t img = null;
-    TCOD_image_t circle = null;
-    TCOD_color_t blue = {0, 0, 255};
-    TCOD_color_t green = {0, 255, 0};
 }
 
 /// =============
@@ -723,6 +743,16 @@ class ImageSample : Sample
 /// =============
 class MouseSample : Sample
 {
+    private:
+
+    bool lbut = false;
+    bool rbut = false;
+    bool mbut = false;
+    charptr on = null;
+    charptr off = null;
+
+    public:
+
     this()
     {
         /* Once a string literal has gone through a ternary, passing
@@ -765,12 +795,6 @@ class MouseSample : Sample
         if (key.c == '1') TCOD_mouse_show_cursor(false);
         else if (key.c == '2') TCOD_mouse_show_cursor(true);
     }
-
-    bool lbut = false;
-    bool rbut = false;
-    bool mbut = false;
-    charptr on = null;
-    charptr off = null;
 }
 
 /// ============
@@ -779,6 +803,24 @@ class MouseSample : Sample
 
 class PathSample : Sample
 {
+    private:
+
+    int px = 20, py = 10;  // Player position.
+    int dx = 24, dy = 1;   // Player destination.
+    TCOD_map_t map = null;
+    TCOD_color_t dark_wall = {0, 0, 100};
+    TCOD_color_t dark_ground = {50, 50, 150};
+    TCOD_color_t light_ground = {200, 180, 50};
+    TCOD_path_t path = null;
+    bool usingAstar = true;
+    float dijkstraDist = 0.0;
+    TCOD_dijkstra_t dijkstra = null;
+    bool recalculatePath = false;
+    float busy = 0.0f;
+    int oldChar = ' ';
+
+    public:
+
     this()
     {
         map = TCOD_map_new(SAMPLE_SCREEN_WIDTH, SAMPLE_SCREEN_HEIGHT);
@@ -947,20 +989,6 @@ class PathSample : Sample
             destMoved();
         }
     }
-
-    int px = 20, py = 10;  // Player position.
-    int dx = 24, dy = 1;   // Player destination.
-    TCOD_map_t map = null;
-    TCOD_color_t dark_wall = {0, 0, 100};
-    TCOD_color_t dark_ground = {50, 50, 150};
-    TCOD_color_t light_ground = {200, 180, 50};
-    TCOD_path_t path = null;
-    bool usingAstar = true;
-    float dijkstraDist = 0.0;
-    TCOD_dijkstra_t dijkstra = null;
-    bool recalculatePath = false;
-    float busy = 0.0f;
-    int oldChar = ' ';
 }
 
 /// ===========
@@ -1139,6 +1167,21 @@ body
 
 class BSPSample : Sample
 {
+    private:
+
+    TCOD_bsp_t* bsp = null;
+    bool generate = true;
+    bool refresh = false;
+    TCOD_color_t darkWall = {0, 0, 100};
+    TCOD_color_t darkGround = {50, 50, 150};
+    int bspDepth = 8;
+    charptr on = null;
+    charptr off = null;
+
+    ubyte[SAMPLE_SCREEN_WIDTH * SAMPLE_SCREEN_HEIGHT] map = void;
+
+    public:
+
     this()
     {
         on = toStringz("ON ");
@@ -1216,18 +1259,6 @@ class BSPSample : Sample
             refresh = true;
         }
     }
-
-    TCOD_bsp_t* bsp = null;
-    bool generate = true;
-    bool refresh = false;
-    TCOD_color_t darkWall = {0, 0, 100};
-    TCOD_color_t darkGround = {50, 50, 150};
-    int bspDepth = 8;
-    charptr on = null;
-    charptr off = null;
-
-
-    ubyte[SAMPLE_SCREEN_WIDTH * SAMPLE_SCREEN_HEIGHT] map = void;
 }
 
 
@@ -1237,6 +1268,16 @@ class BSPSample : Sample
 
 class NameGeneratorSample : Sample
 {
+    private:
+
+    int nbSets;
+    int curSet = 0;
+    float delay = 0.0f;
+    TCOD_list_t sets = null;
+    TCOD_list_t names = null;
+
+    public:
+
     string name() { return "  Name generator     "; }
 
     this()
@@ -1295,12 +1336,6 @@ class NameGeneratorSample : Sample
             TCOD_list_push(names, cast(void*) "======".dup);
         }
     }
-
-    int nbSets;
-    int curSet = 0;
-    float delay = 0.0f;
-    TCOD_list_t sets = null;
-    TCOD_list_t names = null;
 }
 
 
