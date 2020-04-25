@@ -345,18 +345,24 @@ enum : TCOD_keycode_t {
     TCODK_NUMLOCK,
     TCODK_SCROLLLOCK,
     TCODK_SPACE,
-    TCODK_CHAR
+    TCODK_CHAR,
+    TCODK_TEXT
 }
 
-/* key data : special code or character */
+immutable TCOD_KEY_TEXT_SIZE = 32;
+
+/* key data : special code or character or text */
 struct TCOD_key_t {
     TCOD_keycode_t vk; /*  key code */
     char c; /* character if vk == TCODK_CHAR else 0 */
+    char[TCOD_KEY_TEXT_SIZE] text; /* text if vk == TCODK_TEXT else text[0] == '\0' */
     bool pressed;
     bool lalt;
     bool lctrl;
+    bool lmeta;
     bool ralt;
     bool rctrl;
+    bool rmeta;
     bool shift;
 }
 
@@ -498,20 +504,52 @@ enum {
     TCOD_KEY_RELEASED=2,
 }
 
-// custom font flags
+/**
+ *  These font flags can be OR'd together into a bit-field and passed to
+ *  TCOD_console_set_custom_font
+ */
 enum {
+    /** Tiles are arranged in column-major order.
+     *
+     *       0 3 6
+     *       1 4 7
+     *       2 5 8
+     */
     TCOD_FONT_LAYOUT_ASCII_INCOL=1,
+    /** Tiles are arranged in row-major order.
+     *
+     *       0 1 2
+     *       3 4 5
+     *       6 7 8
+     */
     TCOD_FONT_LAYOUT_ASCII_INROW=2,
+    /** Converts all tiles into a monochrome gradient. */
     TCOD_FONT_TYPE_GREYSCALE=4,
     TCOD_FONT_TYPE_GRAYSCALE=4,
+    /** A unique layout used by some of libtcod's fonts. */
     TCOD_FONT_LAYOUT_TCOD=8,
 }
 
 alias int TCOD_renderer_t;
+/**
+ *  The available renderers.
+ */
 enum : TCOD_renderer_t {
+    /** An OpenGL implementation using a shader. */
     TCOD_RENDERER_GLSL,
+    /**
+     *  An OpenGL implementation without a shader.
+     *
+     *  Performs worse than TCOD_RENDERER_GLSL without many benefits.
+     */
     TCOD_RENDERER_OPENGL,
+    /**
+     *  A software based renderer.
+     *
+     *  The font file is loaded into RAM instead of VRAM in this implementation.
+     */
     TCOD_RENDERER_SDL,
+    TCOD_NB_RENDERERS,
 }
 
 alias int TCOD_alignment_t;
@@ -531,6 +569,7 @@ alias void* TCOD_image_t;
 alias int TCOD_event_t;
 
 enum : TCOD_event_t {
+    TCOD_EVENT_NONE=0,
     TCOD_EVENT_KEY_PRESS = 1,
     TCOD_EVENT_KEY_RELEASE = 2,
     TCOD_EVENT_KEY = TCOD_EVENT_KEY_PRESS | TCOD_EVENT_KEY_RELEASE,
@@ -538,7 +577,11 @@ enum : TCOD_event_t {
     TCOD_EVENT_MOUSE_PRESS = 8,
     TCOD_EVENT_MOUSE_RELEASE = 16,
     TCOD_EVENT_MOUSE = TCOD_EVENT_MOUSE_MOVE | TCOD_EVENT_MOUSE_PRESS | TCOD_EVENT_MOUSE_RELEASE,
-    TCOD_EVENT_ANY = TCOD_EVENT_KEY | TCOD_EVENT_MOUSE,
+    TCOD_EVENT_FINGER_MOVE=32,
+    TCOD_EVENT_FINGER_PRESS=64,
+    TCOD_EVENT_FINGER_RELEASE=128,
+    TCOD_EVENT_FINGER=TCOD_EVENT_FINGER_MOVE|TCOD_EVENT_FINGER_PRESS|TCOD_EVENT_FINGER_RELEASE,
+    TCOD_EVENT_ANY=TCOD_EVENT_KEY|TCOD_EVENT_MOUSE|TCOD_EVENT_FINGER,
 }
 
 alias void* TCOD_thread_t;
@@ -811,7 +854,7 @@ struct TCOD_parser_int_t {
     TCOD_list_t structs;
     /* list of custom type parsers */
     TCOD_parser_custom_t[16] customs;
-    /* fatal error occured */
+    /* fatal error occurred */
     bool fatal;
     // list of properties if default listener is used
     TCOD_list_t props;

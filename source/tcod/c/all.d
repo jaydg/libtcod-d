@@ -37,9 +37,10 @@ alias short int16;
 alias uint uint32;
 alias int int32;
 
-const int TCOD_HEXVERSION = 0x010501;
-const string TCOD_STRVERSION = "1.5.1";
-const int TCOD_TECHVERSION = 0x01050103;
+const int TCOD_HEXVERSION = 0x010607;
+const string TCOD_STRVERSION = "1.6.7";
+const int TCOD_TECHVERSION = 0x01060700;
+charptr TCOD_STRVERSIONNAME = "libtcod 1.6.7";
 
 /******************************************
  utility macros

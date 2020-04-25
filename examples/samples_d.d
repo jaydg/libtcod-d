@@ -456,41 +456,43 @@ class NoiseSample : Sample
 
         // Handle keypress.
         if (key.vk == TCODK_NONE) return;
-        if (key.c >= '1' && key.c <= '9') {
-            // Change the noise function.
-            func = key.c - '1';
-        } else if (key.c == 'E' || key.c == 'e') {
-            // Increase hurst.
-            hurst += 0.1f;
-            TCOD_noise_delete(noise);
-            noise = TCOD_noise_new(2, hurst, lacunarity, null);
-        } else if (key.c == 'D' || key.c == 'd') {
-            // Decrease hurst.
-            hurst -= 0.1f;
-            TCOD_noise_delete(noise);
-            noise = TCOD_noise_new(2, hurst, lacunarity, null);
-        } else if (key.c == 'R' || key.c == 'r') {
-            // Increase lacunarity.
-            lacunarity += 0.5f;
-            TCOD_noise_delete(noise);
-            noise = TCOD_noise_new(2, hurst, lacunarity, null);
-        } else if (key.c == 'F' || key.c == 'f') {
-            // Decrease lacunarity.
-            lacunarity -= 0.5f;
-            TCOD_noise_delete(noise);
-            noise = TCOD_noise_new(2, hurst, lacunarity, null);
-        } else if (key.c == 'T' || key.c == 't') {
-            // Increase octaves.
-            octaves += 0.5f;
-        } else if (key.c == 'G' || key.c == 'g') {
-            // Decrease octaves.
-            octaves -= 0.5f;
-        } else if (key.c == 'Y' || key.c == 'y') {
-            // Increase zoom.
-            zoom += 0.2f;
-        } else if (key.c == 'H' || key.c == 'h') {
-            // Decrease zoom.
-            zoom -= 0.2f;
+        if (key.vk == TCODK_TEXT && key.text[0] != '\0') {
+            if (key.text[0] >= '1' && key.text[0] <= '9') {
+                // Change the noise function.
+                func = key.text[0] - '1';
+            } else if (key.text[0] == 'E' || key.text[0] == 'e') {
+                // Increase hurst.
+                hurst += 0.1f;
+                TCOD_noise_delete(noise);
+                noise = TCOD_noise_new(2, hurst, lacunarity, null);
+            } else if (key.text[0] == 'D' || key.text[0] == 'd') {
+                // Decrease hurst.
+                hurst -= 0.1f;
+                TCOD_noise_delete(noise);
+                noise = TCOD_noise_new(2, hurst, lacunarity, null);
+            } else if (key.text[0] == 'R' || key.text[0] == 'r') {
+                // Increase lacunarity.
+                lacunarity += 0.5f;
+                TCOD_noise_delete(noise);
+                noise = TCOD_noise_new(2, hurst, lacunarity, null);
+            } else if (key.text[0] == 'F' || key.text[0] == 'f') {
+                // Decrease lacunarity.
+                lacunarity -= 0.5f;
+                TCOD_noise_delete(noise);
+                noise = TCOD_noise_new(2, hurst, lacunarity, null);
+            } else if (key.text[0] == 'T' || key.text[0] == 't') {
+                // Increase octaves.
+                octaves += 0.5f;
+            } else if (key.text[0] == 'G' || key.text[0] == 'g') {
+                // Decrease octaves.
+                octaves -= 0.5f;
+            } else if (key.text[0] == 'Y' || key.text[0] == 'y') {
+                // Increase zoom.
+                zoom += 0.2f;
+            } else if (key.text[0] == 'H' || key.text[0] == 'h') {
+                // Decrease zoom.
+                zoom -= 0.2f;
+            }
         }
     }
 }
@@ -624,54 +626,56 @@ class FOVSample : Sample
             }
         }
 
-        if (key.c == 'I' || key.c == 'i') {
-            if (smap[py - 1][px] == ' ') {
-                TCOD_console_put_char(sample_console, px, py, ' ',
-                                      TCOD_BKGND_NONE);
-                py--;
-                TCOD_console_put_char(sample_console, px, py, '@',
-                                      TCOD_BKGND_NONE);
+        if (key.vk == TCODK_TEXT && key.text[0] != '\0') {
+            if (key.text[0] == 'I' || key.text[0] == 'i') {
+                if (smap[py - 1][px] == ' ') {
+                    TCOD_console_put_char(sample_console, px, py, ' ',
+                                        TCOD_BKGND_NONE);
+                    py--;
+                    TCOD_console_put_char(sample_console, px, py, '@',
+                                        TCOD_BKGND_NONE);
+                    recompute_fov = true;
+                }
+            } else if (key.text[0] == 'K' || key.text[0] == 'k') {
+                if (smap[py + 1][px] == ' ') {
+                    TCOD_console_put_char(sample_console, px, py, ' ',
+                                        TCOD_BKGND_NONE);
+                    py++;
+                    TCOD_console_put_char(sample_console, px, py, '@',
+                                        TCOD_BKGND_NONE);
+                    recompute_fov = true;
+                }
+            } else if (key.text[0] == 'J' || key.text[0] == 'j') {
+                if (smap[py][px - 1] == ' ') {
+                    TCOD_console_put_char(sample_console, px, py, ' ',
+                                        TCOD_BKGND_NONE);
+                    px--;
+                    TCOD_console_put_char(sample_console, px, py, '@',
+                                        TCOD_BKGND_NONE);
+                    recompute_fov = true;
+                }
+            } else if (key.text[0] == 'L' || key.text[0] == 'l') {
+                if (smap[py][px + 1] == ' ') {
+                    TCOD_console_put_char(sample_console, px, py, ' ',
+                                        TCOD_BKGND_NONE);
+                    px++;
+                    TCOD_console_put_char(sample_console, px, py, '@',
+                                        TCOD_BKGND_NONE);
+                    recompute_fov = true;
+                }
+            } else if (key.text[0] == 'T' || key.text[0] == 't') {
+                torch = !torch;
+                print_text();
+            } else if (key.text[0] == 'W' || key.text[0] == 'w') {
+                light_walls = !light_walls;
+                print_text();
+                recompute_fov = true;
+            } else if (key.text[0] == '+' || key.text[0] == '-') {
+                algonum += key.text[0] == '+' ? 1 : -1;
+                algonum = CLAMP(0, NB_FOV_ALGORITHMS - 1, algonum);
+                print_text();
                 recompute_fov = true;
             }
-        } else if (key.c == 'K' || key.c == 'k') {
-            if (smap[py + 1][px] == ' ') {
-                TCOD_console_put_char(sample_console, px, py, ' ',
-                                      TCOD_BKGND_NONE);
-                py++;
-                TCOD_console_put_char(sample_console, px, py, '@',
-                                      TCOD_BKGND_NONE);
-                recompute_fov = true;
-            }
-        } else if (key.c == 'J' || key.c == 'j') {
-            if (smap[py][px - 1] == ' ') {
-                TCOD_console_put_char(sample_console, px, py, ' ',
-                                      TCOD_BKGND_NONE);
-                px--;
-                TCOD_console_put_char(sample_console, px, py, '@',
-                                      TCOD_BKGND_NONE);
-                recompute_fov = true;
-            }
-        } else if (key.c == 'L' || key.c == 'l') {
-            if (smap[py][px + 1] == ' ') {
-                TCOD_console_put_char(sample_console, px, py, ' ',
-                                      TCOD_BKGND_NONE);
-                px++;
-                TCOD_console_put_char(sample_console, px, py, '@',
-                                      TCOD_BKGND_NONE);
-                recompute_fov = true;
-            }
-        } else if (key.c == 'T' || key.c == 't') {
-            torch = !torch;
-            print_text();
-        } else if (key.c == 'W' || key.c == 'w') {
-            light_walls = !light_walls;
-            print_text();
-            recompute_fov = true;
-        } else if (key.c == '+' || key.c == '-') {
-            algonum += key.c == '+' ? 1 : -1;
-            algonum = CLAMP(0, NB_FOV_ALGORITHMS - 1, algonum);
-            print_text();
-            recompute_fov = true;
         }
     }
 }
@@ -778,22 +782,26 @@ class MouseSample : Sample
         if (mouse.mbutton_pressed) mbut = !mbut;
 
         TCOD_console_print(sample_console, 1, 1,
-                                "Mouse position : %4dx%4d\n"
+                                "%s\n"
+                                ~ "Mouse position : %4dx%4d %s\n"
                                 ~ "Mouse cell     : %4dx%4d\n"
                                 ~ "Mouse movement : %4dx%4d\n"
                                 ~ "Left button    : %s (toggle %s)\n"
                                 ~ "Right button   : %s (toggle %s)\n"
                                 ~ "Middle button  : %s (toggle %s)\n",
-                                mouse.x, mouse.y,
+                                TCOD_console_is_active() ? "" : toStringz("APPLICATION INACTIVE"),
+                                mouse.x, mouse.y, TCOD_console_has_mouse_focus() ? "" : toStringz("OUT OF FOCUS"),
                                 mouse.cx, mouse.cy,
                                 mouse.dx, mouse.dy,
                                 mouse.lbutton ? on : off, lbut ? on : off,
                                 mouse.rbutton ? on : off, rbut ? on : off,
                                 mouse.mbutton ? on : off, mbut ? on : off);
         TCOD_console_print(sample_console, 1, 10,
-                                "1 : Hide cursor\n2 : Show cursor");
-        if (key.c == '1') TCOD_mouse_show_cursor(false);
-        else if (key.c == '2') TCOD_mouse_show_cursor(true);
+                               "1 : Hide cursor\n2 : Show cursor");
+        if (key.vk == TCODK_TEXT && key.text[0] != '\0') {
+            if (key.text[0] == '1') TCOD_mouse_show_cursor(false);
+            else if (key.text[0] == '2') TCOD_mouse_show_cursor(true);
+        }
     }
 }
 
@@ -949,34 +957,35 @@ class PathSample : Sample
             }
         }
 
-        if ((key.c == 'I' || key.c == 'i') && dy > 0) {
-            // North.
-            TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
-            dy--;
-            destMoved();
-        } else if ((key.c == 'K' || key.c == 'k') && dy < SAMPLE_SCREEN_HEIGHT - 1) {
-            // South.
-            TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
-            dy++;
-            destMoved();
-        } else if ((key.c == 'J' || key.c == 'j') && dx > 0) {
-            // West.
-            TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
-            dx--;
-            destMoved();
-        } else if ((key.c == 'L' || key.c == 'l') && dx < SAMPLE_SCREEN_WIDTH - 1) {
-            // East.
-            TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
-            dx++;
-            destMoved();
-        } else if (key.vk == TCODK_TAB) {
+        if (key.vk == TCODK_TAB) {
             usingAstar = !usingAstar;
-            if (usingAstar) {
+            if (usingAstar)
                 TCOD_console_print(sample_console, 1, 4, "Using : A*      ");
-            } else {
+            else
                 TCOD_console_print(sample_console, 1, 4, "Using : Dijkstra");
-            }
             recalculatePath = true;
+        } else if (key.vk == TCODK_TEXT && key.text[0] != '\0') {
+            if ((key.text[0] == 'I' || key.text[0] == 'i') && dy > 0) {
+                // North.
+                TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
+                dy--;
+                destMoved();
+            } else if ((key.text[0] == 'K' || key.text[0] == 'k') && dy < SAMPLE_SCREEN_HEIGHT - 1) {
+                // South.
+                TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
+                dy++;
+                destMoved();
+            } else if ((key.text[0] == 'J' || key.text[0] == 'j') && dx > 0) {
+                // West.
+                TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
+                dx--;
+                destMoved();
+            } else if ((key.text[0] == 'L' || key.text[0] == 'l') && dx < SAMPLE_SCREEN_WIDTH - 1) {
+                // East.
+                TCOD_console_put_char(sample_console, dx, dy, oldChar, TCOD_BKGND_NONE);
+                dx++;
+                destMoved();
+            }
         }
 
         int mx = mouse.cx - SAMPLE_SCREEN_X;
@@ -1236,27 +1245,29 @@ class BSPSample : Sample
         }
         if (key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER) {
             generate = true;
-        } else if (key.c == ' ') {
-            refresh = true;
-        } else if (key.c == '+') {
-            bspDepth++;
-            generate = true;
-        } else if (key.c == '-' && bspDepth > 1) {
-            bspDepth--;
-            generate = true;
-        } else if (key.c == '*') {
-            minRoomSize++;
-            generate = true;
-        } else if (key.c == '/' && minRoomSize > 2) {
-            minRoomSize--;
-            generate = true;
-        } else if (key.c == '1' || key.vk == TCODK_1 || key.vk == TCODK_KP1) {
-            randomRoom = !randomRoom;
-            if (!randomRoom) roomWalls = true;
-            refresh = true;
-        } else if (key.c == '2' || key.vk == TCODK_2 || key.vk == TCODK_KP2) {
-            roomWalls = !roomWalls;
-            refresh = true;
+        } else if (key.vk == TCODK_TEXT && key.text[0] != '\0') {
+            if (key.text[0] == ' ') {
+                refresh = true;
+            } else if (key.text[0] == '+') {
+                bspDepth++;
+                generate = true;
+            } else if (key.text[0] == '-' && bspDepth > 1) {
+                bspDepth--;
+                generate = true;
+            } else if (key.text[0] == '*') {
+                minRoomSize++;
+                generate = true;
+            } else if (key.text[0] == '/' && minRoomSize > 2) {
+                minRoomSize--;
+                generate = true;
+            } else if (key.text[0] == '1' || key.vk == TCODK_1 || key.vk == TCODK_KP1) {
+                randomRoom = !randomRoom;
+                if (!randomRoom) roomWalls = true;
+                refresh = true;
+            } else if (key.text[0] == '2' || key.vk == TCODK_2 || key.vk == TCODK_KP2) {
+                roomWalls = !roomWalls;
+                refresh = true;
+            }
         }
     }
 }
@@ -1312,28 +1323,34 @@ class NameGeneratorSample : Sample
 
         TCOD_console_clear(sample_console);
         TCOD_console_set_default_foreground(sample_console, TCOD_white);
-        TCOD_console_print(sample_console, 1, 1, "%s\n\n+ : next generator\n- : prev generator", cast(charptr)TCOD_list_get(sets, curSet));
-        for (int i = 0; i < TCOD_list_size(names); i++) {
-            charptr name = cast(charptr) TCOD_list_get(names, i);
-            if (strlen(name) < SAMPLE_SCREEN_WIDTH) {
-                TCOD_console_print_ex(sample_console, SAMPLE_SCREEN_WIDTH -2, 2 + i, TCOD_BKGND_NONE, TCOD_RIGHT, name);
+        if (TCOD_list_size(sets) > 0) {
+            TCOD_console_print(sample_console, 1, 1, "%s\n\n+ : next generator\n- : prev generator", cast(charptr)TCOD_list_get(sets, curSet));
+            for (int i = 0; i < TCOD_list_size(names); i++) {
+                charptr name = cast(charptr) TCOD_list_get(names, i);
+                if (strlen(name) < SAMPLE_SCREEN_WIDTH) {
+                    TCOD_console_print_ex(sample_console, SAMPLE_SCREEN_WIDTH -2, 2 + i, TCOD_BKGND_NONE, TCOD_RIGHT, name);
+                }
             }
-        }
 
-        delay += TCOD_sys_get_last_frame_length();
-        if (delay >= 0.5f) {
-            delay -= 0.5f;
-            // Add a new name to the list.
-            TCOD_list_push(names, cast(void*) TCOD_namegen_generate(cast(charptr)TCOD_list_get(sets, curSet), true));
-        }
-        if (key.c == '+') {
-            curSet++;
-            if (curSet == nbSets) curSet = 0;
-            TCOD_list_push(names, cast(void*) "======".dup);
-        } else if (key.c == '-') {
-            curSet--;
-            if (curSet < 0) curSet = nbSets - 1;
-            TCOD_list_push(names, cast(void*) "======".dup);
+            delay += TCOD_sys_get_last_frame_length();
+            if (delay >= 0.5f) {
+                delay -= 0.5f;
+                // Add a new name to the list.
+                TCOD_list_push(names, cast(void*) TCOD_namegen_generate(cast(charptr)TCOD_list_get(sets, curSet), true));
+            }
+            if (key.vk == TCODK_TEXT && key.text[0] != '\0') {
+                if (key.text[0] == '+') {
+                    curSet++;
+                    if (curSet == nbSets) curSet = 0;
+                    TCOD_list_push(names, cast(void*) "======".dup);
+                } else if (key.text[0] == '-') {
+                    curSet--;
+                    if (curSet < 0) curSet = nbSets - 1;
+                    TCOD_list_push(names, cast(void*) "======".dup);
+                }
+            }
+        } else {
+            TCOD_console_print(sample_console, 1, 1, "Unable to find name config data files.");
         }
     }
 }
