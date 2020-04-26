@@ -1,16 +1,13 @@
-# libtcod-d 1.5.1-2
+# libtcod-d 1.6.7-1
 
 libtcod-d is a set of bindings for using the excellent
 [libtcod](https://github.com/libtcod/libtcod) with the D programming
 language.
 
 The DLL (libtcod.so on Linux, libtcod.dll on Windows) is dynamically loaded
-on start up, not linked at compile time.
-
-It searches for libtcod_debug.so, and if it can't find that, then libtcod.so
-on the executable's path (or dlls if on Windows). The current release build of
-libtcod.so 1.5.1 is lacking the function `TCOD_mouse_includes_touch`, and will
-fail on attempting to load that function.
+on start up, not linked at compile time. Programs built with this library
+will search for libtcod_debug.so, and if that can't be found, for libtcod.so
+on the executable's path (or dlls if on Windows).
 
 ATTENTION: the x86_64 version of the library doesnt't work with DMD; the
 sample application crashes immediately as some function calls simply don't
