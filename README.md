@@ -1,7 +1,7 @@
 # libtcod-d 1.5.1-2
 
 libtcod-d is a set of bindings for using the excellent
-[libtcod](http://roguecentral.org/doryen/libtcod/) in the D programming
+[libtcod](https://github.com/libtcod/libtcod) with the D programming
 language.
 
 The DLL (libtcod.so on Linux, libtcod.dll on Windows) is dynamically loaded
