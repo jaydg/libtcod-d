@@ -350,7 +350,6 @@ extern(C) @nogc nothrow {
     alias da_TCOD_sys_get_last_frame_length = float function();
     alias da_TCOD_sys_get_num_cores = int function();
     alias da_TCOD_sys_get_renderer = TCOD_renderer_t function();
-    alias da_TCOD_sys_get_sdl_window = void* function();
     alias da_TCOD_sys_is_directory = bool function(charptr);
     alias da_TCOD_sys_read_file = bool function(charptr, charptr*, uint32*);
     alias da_TCOD_sys_register_SDL_renderer = void function(SDL_renderer_t);
@@ -735,7 +734,6 @@ __gshared {
     da_TCOD_sys_get_last_frame_length TCOD_sys_get_last_frame_length;
     da_TCOD_sys_get_num_cores TCOD_sys_get_num_cores;
     da_TCOD_sys_get_renderer TCOD_sys_get_renderer;
-    da_TCOD_sys_get_sdl_window TCOD_sys_get_sdl_window;
     da_TCOD_sys_is_directory TCOD_sys_is_directory;
     da_TCOD_sys_read_file TCOD_sys_read_file;
     da_TCOD_sys_register_SDL_renderer TCOD_sys_register_SDL_renderer;
@@ -1130,7 +1128,6 @@ class DerelictTCODLoader : SharedLibLoader {
         bindFunc(cast(void**)&TCOD_sys_get_last_frame_length, "TCOD_sys_get_last_frame_length");
         bindFunc(cast(void**)&TCOD_sys_get_num_cores, "TCOD_sys_get_num_cores");
         bindFunc(cast(void**)&TCOD_sys_get_renderer, "TCOD_sys_get_renderer");
-        //bindFunc(cast(void**)&TCOD_sys_get_sdl_window, "TCOD_sys_get_sdl_window");
         bindFunc(cast(void**)&TCOD_sys_is_directory, "TCOD_sys_is_directory");
         bindFunc(cast(void**)&TCOD_sys_read_file, "TCOD_sys_read_file");
         bindFunc(cast(void**)&TCOD_sys_register_SDL_renderer, "TCOD_sys_register_SDL_renderer");

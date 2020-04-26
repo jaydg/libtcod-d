@@ -9,8 +9,8 @@ on start up, not linked at compile time.
 
 It searches for libtcod_debug.so, and if it can't find that, then libtcod.so
 on the executable's path (or dlls if on Windows). The current release build of
-libtcod.so 1.5.1 is lacking the functions `TCOD_mouse_includes_touch` and
-`TCOD_sys_get_sdl_window`, and will fail on attempting to load those functions.
+libtcod.so 1.5.1 is lacking the function `TCOD_mouse_includes_touch`, and will
+fail on attempting to load that function.
 
 ATTENTION: the x86_64 version of the library doesnt't work with DMD; the
 sample application crashes immediately as some function calls simply don't

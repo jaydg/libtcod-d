@@ -308,7 +308,6 @@ void function(int*, int*) TCOD_sys_get_current_resolution;
 void function(int*, int*) TCOD_sys_get_fullscreen_offsets;
 void function(int, int, int, TCOD_image_t, int, int) TCOD_sys_update_char;
 void function(int*, int*) TCOD_sys_get_char_size;
-void* function() TCOD_sys_get_sdl_window;
 TCOD_event_t function(int, TCOD_key_t*, TCOD_mouse_t*, bool) TCOD_sys_wait_for_event;
 TCOD_event_t function(int, TCOD_key_t*, TCOD_mouse_t*) TCOD_sys_check_for_event;
 bool function(charptr) TCOD_sys_create_directory;
