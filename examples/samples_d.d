@@ -11,7 +11,7 @@ import std.conv;
 import core.stdc.stdlib : malloc, free, exit;
 import core.stdc.string;
 
-import sdl.c.video;
+import derelict.sdl2.sdl;
 import tcod.c.all;
 
 Mt19937 gen;
