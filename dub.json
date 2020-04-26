@@ -18,7 +18,7 @@
 		},
 		{
 			"name": "samples_d",
-			"mainSourceFile" : "examples/samples_d",
+			"mainSourceFile" : "examples/samples_d.d",
 			"targetName": "samples_d",
 			"targetType": "executable",
 			"targetPath": "bin"
