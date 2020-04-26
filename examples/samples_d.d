@@ -1567,7 +1567,7 @@ class SDLCallbackSample : Sample
             TCOD_console_set_default_foreground(sample_console, TCOD_white);
             TCOD_console_clear(sample_console);
             TCOD_console_print_rect_ex(sample_console, SAMPLE_SCREEN_WIDTH / 2, 3, SAMPLE_SCREEN_WIDTH, 0, TCOD_BKGND_NONE, TCOD_CENTER,
-                "The SDL callback gives you acce3ss to the screen surface so that you can alter the pixels one by one using the SDL API or any API on top of SDL. SDL is used here to blur the sample console.\n\nHit TAB to enable/disable the callback. While enabled, it will be active on other samples too.");
+                "The SDL callback gives you access to the screen surface so that you can alter the pixels one by one using the SDL API or any API on top of SDL. SDL is used here to blur the sample console.\n\nHit TAB to enable/disable the callback. While enabled, it will be active on other samples too.");
         }
         if (key.vk == TCODK_TAB) {
             sdl_callback_enabled = !sdl_callback_enabled;
